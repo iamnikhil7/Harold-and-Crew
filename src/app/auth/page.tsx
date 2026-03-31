@@ -6,15 +6,12 @@ import { supabase } from "@/lib/supabase";
 
 type AuthMode = "landing" | "login" | "signup";
 
-const insights = [
-  "The average person makes 35,000 decisions a day. Most of them happen on autopilot.",
-  "It takes 66 days to form a new habit — but only one moment of awareness to break an old one.",
-  "We don't lack willpower. We lack awareness of the exact moment we need it.",
-  "90% of our daily actions are habitual. The other 10% shape who we become.",
+const thoughts = [
   "The space between stimulus and response is where your freedom lives.",
-  "Your brain rewires itself every single day. The question is: who's directing the rewiring?",
-  "People who pause before acting are 4x more likely to align with their long-term goals.",
-  "Vulnerability isn't weakness — it's the birthplace of change.",
+  "You don't lack willpower. You lack awareness of the exact moment you need it.",
+  "90% of your daily actions are habitual. The other 10% shape who you become.",
+  "It takes 66 days to form a new habit — but one moment of awareness to break an old one.",
+  "Your brain rewires itself every day. The question is who's directing the rewiring.",
 ];
 
 export default function AuthPage() {
@@ -25,18 +22,14 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
-  const [insightIndex, setInsightIndex] = useState(0);
-  const [insightFading, setInsightFading] = useState(false);
+  const [thoughtIndex, setThoughtIndex] = useState(0);
+  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data } = await supabase
-          .from("users")
-          .select("onboarding_completed")
-          .eq("id", user.id)
-          .single();
+        const { data } = await supabase.from("users").select("onboarding_completed").eq("id", user.id).single();
         if (data?.onboarding_completed) { router.push("/dashboard"); }
         else { router.push("/onboarding"); }
         return;
@@ -46,13 +39,12 @@ export default function AuthPage() {
     checkSession();
   }, [router]);
 
-  // Rotate insights
   useEffect(() => {
     const timer = setInterval(() => {
-      setInsightFading(true);
+      setFading(true);
       setTimeout(() => {
-        setInsightIndex((prev) => (prev + 1) % insights.length);
-        setInsightFading(false);
+        setThoughtIndex((prev) => (prev + 1) % thoughts.length);
+        setFading(false);
       }, 500);
     }, 5000);
     return () => clearInterval(timer);
@@ -64,31 +56,26 @@ export default function AuthPage() {
     try {
       const { data, error: authError } = await supabase.auth.signInAnonymously();
       if (authError) {
-        console.error("Anonymous auth error:", authError);
-        setError("Something went wrong. Please try creating an account instead.");
+        setError("Could not start session. Try creating an account instead.");
         setLoading(false);
         return;
       }
       if (data.user) {
         await supabase.from("users").upsert({
-          id: data.user.id,
-          anonymous_id: data.user.id,
-          sensitivity_mode: false,
-          onboarding_completed: false,
-          account_linked: false,
+          id: data.user.id, anonymous_id: data.user.id,
+          sensitivity_mode: false, onboarding_completed: false, account_linked: false,
         });
         router.push("/onboarding");
       }
-    } catch (e) {
-      console.error("Auth error:", e);
+    } catch {
       setError("Connection issue. Please try again.");
       setLoading(false);
     }
   }, [router]);
 
   const handleSignUp = async () => {
-    if (!email || !password) { setError("Please fill in all fields."); return; }
-    if (password.length < 6) { setError("Password must be at least 6 characters."); return; }
+    if (!email || !password) { setError("Please fill in both fields."); return; }
+    if (password.length < 6) { setError("Password needs at least 6 characters."); return; }
     setLoading(true); setError("");
     const { data, error: authError } = await supabase.auth.signUp({ email, password });
     if (authError) { setError(authError.message); setLoading(false); return; }
@@ -102,7 +89,7 @@ export default function AuthPage() {
   };
 
   const handleLogin = async () => {
-    if (!email || !password) { setError("Please fill in all fields."); return; }
+    if (!email || !password) { setError("Please fill in both fields."); return; }
     setLoading(true); setError("");
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
     if (authError) { setError(authError.message); setLoading(false); return; }
@@ -113,70 +100,48 @@ export default function AuthPage() {
     }
   };
 
-  const handleGoogle = async () => {
-    setLoading(true); setError("");
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (authError) { setError(authError.message); setLoading(false); }
-  };
-
   if (checkingSession) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <div className="w-10 h-10 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border border-accent/30 border-t-accent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-background relative overflow-hidden">
-      {/* Soft ambient glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/6 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-background">
+      <div className="w-full max-w-xs flex flex-col items-center">
         {/* Logo */}
-        <div className="w-14 h-14 rounded-2xl bg-accent/12 flex items-center justify-center mb-6">
-          <svg className="w-7 h-7 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
-          </svg>
-        </div>
+        <p className="text-sm tracking-widest uppercase text-muted mb-10">Pause</p>
 
-        <h1 className="text-4xl font-bold tracking-tight mb-2">PAUSE</h1>
-
-        {/* Rotating insight */}
-        <div className="h-16 flex items-center justify-center mb-10">
-          <p className={`text-center text-muted text-sm leading-relaxed max-w-xs transition-opacity duration-500 ${insightFading ? "opacity-0" : "opacity-100"}`}>
-            {insights[insightIndex]}
+        {/* Rotating thought */}
+        <div className="h-14 flex items-center justify-center mb-10">
+          <p className={`text-center font-serif text-sm text-muted/70 leading-relaxed max-w-[260px] transition-opacity duration-500 ${fading ? "opacity-0" : "opacity-100"}`}>
+            {thoughts[thoughtIndex]}
           </p>
         </div>
 
         {/* LANDING */}
         {mode === "landing" && (
-          <div className="w-full">
-            {error && <p className="text-red-400 text-sm text-center mb-4">{error}</p>}
+          <div className="w-full text-center">
+            {error && <p className="text-red-400/80 text-sm mb-4">{error}</p>}
             <button
               onClick={handleGetStarted}
               disabled={loading}
-              className="w-full py-4 rounded-full bg-accent text-white font-semibold text-lg hover:bg-accent-soft active:scale-[0.98] transition-all disabled:opacity-50"
+              className="w-full py-3.5 rounded-full bg-accent text-background font-medium hover:bg-accent-soft active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  One moment...
+                  <span className="w-3.5 h-3.5 border border-background/30 border-t-background rounded-full animate-spin" />
+                  One moment
                 </span>
-              ) : "Get Started"}
+              ) : "Get started"}
             </button>
-            <p className="text-center text-xs text-muted/40 mt-3 mb-10">
-              14 questions. No account needed. Takes 3 minutes.
-            </p>
-            <p className="text-center text-sm text-muted">
-              Returning?{" "}
-              <button onClick={() => setMode("login")} className="text-accent hover:text-accent-soft transition-colors font-medium">
-                Log in
+            <p className="text-xs text-muted/30 mt-3">No account needed</p>
+            <p className="text-sm text-muted mt-10">
+              Have an account?{" "}
+              <button onClick={() => setMode("login")} className="text-accent hover:text-accent-soft transition-colors">
+                Sign in
               </button>
             </p>
           </div>
@@ -185,28 +150,17 @@ export default function AuthPage() {
         {/* LOGIN */}
         {mode === "login" && (
           <div className="w-full">
-            <div className="p-6 rounded-2xl bg-surface border border-white/5">
-              <h2 className="text-lg font-semibold mb-5">Welcome back</h2>
-              <button onClick={handleGoogle} disabled={loading} className="w-full py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-surface-light transition-colors flex items-center justify-center gap-2 mb-4">
-                <svg className="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                Continue with Google
-              </button>
-              <div className="relative mb-4">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5" /></div>
-                <div className="relative flex justify-center text-xs"><span className="bg-surface px-3 text-muted/50">or email</span></div>
-              </div>
-              <div className="space-y-3">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onKeyDown={(e) => e.key === "Enter" && handleLogin()} className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
-                {error && <p className="text-red-400 text-sm">{error}</p>}
-                <button onClick={handleLogin} disabled={loading} className="w-full py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent-soft transition-all disabled:opacity-50">
-                  {loading ? "Logging in..." : "Log In"}
-                </button>
-              </div>
+            <div className="space-y-3 mb-4">
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface border border-white/8 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted/30 focus:outline-none focus:border-accent/30 transition-colors" />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onKeyDown={(e) => e.key === "Enter" && handleLogin()} className="w-full bg-surface border border-white/8 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted/30 focus:outline-none focus:border-accent/30 transition-colors" />
             </div>
-            <div className="flex justify-center gap-3 mt-5 text-sm">
+            {error && <p className="text-red-400/80 text-sm mb-3">{error}</p>}
+            <button onClick={handleLogin} disabled={loading} className="w-full py-3 rounded-full bg-accent text-background font-medium hover:bg-accent-soft transition-all disabled:opacity-50 mb-4">
+              {loading ? "Signing in..." : "Sign in"}
+            </button>
+            <div className="flex justify-center gap-3 text-sm">
               <button onClick={() => { setMode("landing"); setError(""); }} className="text-muted hover:text-foreground transition-colors">Back</button>
-              <span className="text-white/10">|</span>
+              <span className="text-white/5">|</span>
               <button onClick={() => { setMode("signup"); setError(""); }} className="text-accent hover:text-accent-soft transition-colors">Create account</button>
             </div>
           </div>
@@ -215,32 +169,21 @@ export default function AuthPage() {
         {/* SIGNUP */}
         {mode === "signup" && (
           <div className="w-full">
-            <div className="p-6 rounded-2xl bg-surface border border-white/5">
-              <h2 className="text-lg font-semibold mb-5">Create your account</h2>
-              <button onClick={handleGoogle} disabled={loading} className="w-full py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-surface-light transition-colors flex items-center justify-center gap-2 mb-4">
-                <svg className="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                Sign up with Google
-              </button>
-              <div className="relative mb-4">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5" /></div>
-                <div className="relative flex justify-center text-xs"><span className="bg-surface px-3 text-muted/50">or email</span></div>
-              </div>
-              <div className="space-y-3">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 characters)" onKeyDown={(e) => e.key === "Enter" && handleSignUp()} className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
-                {error && <p className="text-red-400 text-sm">{error}</p>}
-                <button onClick={handleSignUp} disabled={loading} className="w-full py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent-soft transition-all disabled:opacity-50">
-                  {loading ? "Creating..." : "Create Account"}
-                </button>
-              </div>
-              <button onClick={handleGetStarted} disabled={loading} className="w-full mt-3 py-2 text-sm text-muted hover:text-foreground transition-colors">
-                or start without an account
-              </button>
+            <div className="space-y-3 mb-4">
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface border border-white/8 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted/30 focus:outline-none focus:border-accent/30 transition-colors" />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onKeyDown={(e) => e.key === "Enter" && handleSignUp()} className="w-full bg-surface border border-white/8 rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-muted/30 focus:outline-none focus:border-accent/30 transition-colors" />
             </div>
-            <div className="flex justify-center gap-3 mt-5 text-sm">
+            {error && <p className="text-red-400/80 text-sm mb-3">{error}</p>}
+            <button onClick={handleSignUp} disabled={loading} className="w-full py-3 rounded-full bg-accent text-background font-medium hover:bg-accent-soft transition-all disabled:opacity-50 mb-2">
+              {loading ? "Creating..." : "Create account"}
+            </button>
+            <button onClick={handleGetStarted} disabled={loading} className="w-full py-2 text-xs text-muted/40 hover:text-muted transition-colors mb-4">
+              or skip — start without an account
+            </button>
+            <div className="flex justify-center gap-3 text-sm">
               <button onClick={() => { setMode("landing"); setError(""); }} className="text-muted hover:text-foreground transition-colors">Back</button>
-              <span className="text-white/10">|</span>
-              <button onClick={() => { setMode("login"); setError(""); }} className="text-accent hover:text-accent-soft transition-colors">Log in instead</button>
+              <span className="text-white/5">|</span>
+              <button onClick={() => { setMode("login"); setError(""); }} className="text-accent hover:text-accent-soft transition-colors">Sign in instead</button>
             </div>
           </div>
         )}

@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #ededed;
-  --accent: #8b5cf6;
-  --accent-soft: #7c3aed;
-  --surface: #141420;
-  --surface-light: #1e1e2e;
-  --muted: #71717a;
-  --warm: #f59e0b;
-  --calm: #06b6d4;
-  --success: #10b981;
+  --background: #111110;
+  --foreground: #e8e6e3;
+  --accent: #c9a46c;
+  --accent-soft: #b8935d;
+  --surface: #1a1918;
+  --surface-light: #232220;
+  --muted: #8a8680;
+  --warm: #d4a574;
+  --calm: #7ea8a0;
+  --success: #7eab7e;
 }
 
 @theme inline {
@@ -24,42 +24,37 @@
   --color-warm: var(--warm);
   --color-calm: var(--calm);
   --color-success: var(--success);
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Georgia", "Times New Roman", serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --font-display: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 80px rgba(139, 92, 246, 0.2);
-  }
-}
-
 @keyframes breathe {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.03); }
 }
 
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
-.animate-fade-in-up-delay-1 { animation: fade-in-up 0.8s ease-out 0.2s forwards; opacity: 0; }
-.animate-fade-in-up-delay-2 { animation: fade-in-up 0.8s ease-out 0.4s forwards; opacity: 0; }
-.animate-fade-in-up-delay-3 { animation: fade-in-up 0.8s ease-out 0.6s forwards; opacity: 0; }
-.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+.animate-fade-in-up { animation: fade-in-up 0.7s ease-out forwards; }
+.animate-fade-in-up-delay-1 { animation: fade-in-up 0.7s ease-out 0.15s forwards; opacity: 0; }
+.animate-fade-in-up-delay-2 { animation: fade-in-up 0.7s ease-out 0.3s forwards; opacity: 0; }
+.animate-fade-in-up-delay-3 { animation: fade-in-up 0.7s ease-out 0.45s forwards; opacity: 0; }
+.animate-breathe { animation: breathe 6s ease-in-out infinite; }
+
+.font-serif {
+  font-family: "Georgia", "Times New Roman", serif;
+}
