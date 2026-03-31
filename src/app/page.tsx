@@ -16,10 +16,7 @@ export default function Home() {
             </div>
             <span className="font-semibold text-sm">PAUSE</span>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/auth" className="text-sm text-muted hover:text-foreground transition-colors">Sign in</Link>
-            <Link href="/auth" className="text-sm font-medium px-4 py-1.5 rounded-lg bg-accent text-background hover:bg-accent-soft transition-colors">Get started</Link>
-          </div>
+          <Link href="/auth" className="text-sm font-medium px-4 py-1.5 rounded-lg border border-white/10 text-foreground hover:bg-surface-light transition-colors">Log in</Link>
         </div>
       </header>
 
