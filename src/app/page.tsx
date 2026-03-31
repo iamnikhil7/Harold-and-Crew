@@ -68,8 +68,8 @@ export default function Home() {
             </div>
             <span className="font-semibold tracking-tight">PAUSE</span>
           </div>
-          <Link href="/auth" className="text-sm font-medium px-4 py-1.5 rounded-full bg-accent/10 text-accent hover:bg-accent/20 transition-colors">
-            Get Started
+          <Link href="/auth" className="text-sm text-muted hover:text-foreground transition-colors">
+            Log in
           </Link>
         </div>
       </nav>
@@ -219,24 +219,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-32 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/8 rounded-full blur-3xl animate-breathe" />
-        </div>
-        <div className="relative z-10 max-w-lg mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Ready to meet yourself?
-          </h2>
-          <p className="text-muted mb-8">
-            The questionnaire takes 3 minutes. What it reveals might change everything.
+      {/* Final */}
+      <section className="py-24 px-6">
+        <div className="max-w-lg mx-auto text-center">
+          <p className="text-muted text-sm">
+            Ready?{" "}
+            <Link href="/auth" className="text-accent hover:text-accent-soft transition-colors font-medium">
+              Begin the questionnaire
+            </Link>
           </p>
-          <Link
-            href="/auth"
-            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-full bg-accent text-white hover:bg-accent-soft active:scale-[0.98] transition-all"
-          >
-            Begin the Questionnaire
-          </Link>
         </div>
       </section>
 
