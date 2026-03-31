@@ -11,24 +11,23 @@ export default function DashboardPage() {
   const [goals, setGoals] = useState<string[]>([]);
   const [personalWhy, setPersonalWhy] = useState("");
   const [priorities, setPriorities] = useState<string[]>([]);
+  const [connectedApps, setConnectedApps] = useState<string[]>([]);
+  const [resistCount, setResistCount] = useState(0);
+  const [overrideCount, setOverrideCount] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const archetypeId = parseInt(localStorage.getItem("pause_archetype_id") || "0");
-    const storedGoals = JSON.parse(localStorage.getItem("pause_goals") || "[]");
-    const storedWhy = localStorage.getItem("pause_why") || "";
-    const storedPriorities = JSON.parse(localStorage.getItem("pause_priorities") || "[]");
-
-    if (!archetypeId) {
-      router.push("/auth");
-      return;
-    }
+    if (!archetypeId) { router.push("/auth"); return; }
 
     const found = archetypes.find((a) => a.id === archetypeId);
     if (found) setArchetype(found);
-    setGoals(storedGoals);
-    setPersonalWhy(storedWhy);
-    setPriorities(storedPriorities);
+    setGoals(JSON.parse(localStorage.getItem("pause_goals") || "[]"));
+    setPersonalWhy(localStorage.getItem("pause_why") || "");
+    setPriorities(JSON.parse(localStorage.getItem("pause_priorities") || "[]"));
+    setConnectedApps(JSON.parse(localStorage.getItem("pause_connected_apps") || "[]"));
+    setResistCount(parseInt(localStorage.getItem("pause_resist_count") || "0"));
+    setOverrideCount(parseInt(localStorage.getItem("pause_override_count") || "0"));
     setMounted(true);
   }, [router]);
 
@@ -44,9 +43,11 @@ export default function DashboardPage() {
     </div>
   );
 
+  const totalPauses = resistCount + overrideCount;
+  const points = resistCount * 10;
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -57,27 +58,52 @@ export default function DashboardPage() {
             </div>
             <span className="font-semibold text-sm">PAUSE</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted">
-            <span>{archetype.icon}</span>
-            <span className="text-xs">{archetype.name}</span>
+          <div className="flex items-center gap-4">
+            <Link href="/progress" className="text-xs text-muted hover:text-foreground transition-colors">Progress</Link>
+            <div className="flex items-center gap-1.5 text-xs text-muted">
+              <span>{archetype.icon}</span>
+              <span>{archetype.name}</span>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
+        {/* Quick stats */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="p-3 rounded-lg bg-surface border border-white/5 text-center">
+            <p className="text-lg font-bold text-accent">{points}</p>
+            <p className="text-[10px] text-muted">Points</p>
+          </div>
+          <div className="p-3 rounded-lg bg-surface border border-white/5 text-center">
+            <p className="text-lg font-bold text-emerald-400">{resistCount}</p>
+            <p className="text-[10px] text-muted">Resisted</p>
+          </div>
+          <div className="p-3 rounded-lg bg-surface border border-white/5 text-center">
+            <p className="text-lg font-bold">{totalPauses}</p>
+            <p className="text-[10px] text-muted">Total pauses</p>
+          </div>
+        </div>
+
         {/* Observation banner */}
         <div className="p-5 rounded-xl bg-surface border border-white/5 mb-6">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <h2 className="text-sm font-semibold">PAUSE is learning your patterns</h2>
+            <h2 className="text-sm font-semibold">Observation phase</h2>
           </div>
-          <p className="text-xs text-muted mb-3">During the observation phase, PAUSE monitors and builds baseline patterns. No interventions yet.</p>
-          <div className="flex items-center gap-3">
+          <p className="text-xs text-muted mb-3">PAUSE is learning your patterns. During this phase, you can trigger a demo pause to see how it works.</p>
+          <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-1.5 bg-surface-light rounded-full overflow-hidden">
               <div className="h-full bg-accent rounded-full" style={{ width: "14%" }} />
             </div>
             <span className="text-xs text-muted">Day 1 of 7</span>
           </div>
+          <button
+            onClick={() => router.push("/pause")}
+            className="w-full py-2.5 rounded-lg bg-accent/10 border border-accent/20 text-accent text-sm font-medium hover:bg-accent/15 transition-all"
+          >
+            Try a demo pause
+          </button>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -91,7 +117,7 @@ export default function DashboardPage() {
 
           {/* Priorities */}
           <div className="p-5 rounded-xl bg-surface border border-white/5">
-            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Active priorities</h3>
+            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Priorities</h3>
             <div className="space-y-2">
               {priorities.map((p) => {
                 const info = pLabels[p];
@@ -102,57 +128,66 @@ export default function DashboardPage() {
                   </div>
                 ) : null;
               })}
-              {priorities.length === 0 && <p className="text-xs text-muted">None selected</p>}
+              {priorities.length === 0 && <p className="text-xs text-muted">None set</p>}
             </div>
           </div>
 
           {/* Goals */}
           <div className="p-5 rounded-xl bg-surface border border-white/5">
-            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Your goals</h3>
+            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Goals</h3>
             <div className="space-y-1.5">
               {goals.slice(0, 4).map((g, i) => (
                 <p key={i} className="text-sm text-foreground/80 leading-relaxed">{"\u2022"} {g}</p>
               ))}
               {goals.length > 4 && <p className="text-xs text-muted">+{goals.length - 4} more</p>}
-              {goals.length === 0 && <p className="text-xs text-muted">No goals set</p>}
+              {goals.length === 0 && <p className="text-xs text-muted">No goals</p>}
             </div>
           </div>
 
-          {/* Signals */}
+          {/* Signal categories */}
           <div className="p-5 rounded-xl bg-surface border border-white/5 md:col-span-2">
-            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Signal categories</h3>
+            <h3 className="text-xs text-muted uppercase tracking-wider mb-3">Ambient sensing</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { name: "Movement", color: "text-emerald-400", active: priorities.includes("physical_health") },
-                { name: "Nutrition", color: "text-amber-400", active: priorities.includes("nutritional_health") },
-                { name: "Screen Time", color: "text-violet-400", active: priorities.includes("digital_wellness") },
-                { name: "Sleep", color: "text-blue-400", active: true },
-                { name: "Spending", color: "text-muted", active: false },
-                { name: "Social", color: "text-muted", active: false },
-                { name: "Work Stress", color: "text-muted", active: false },
+                { name: "Movement", active: priorities.includes("physical_health") },
+                { name: "Nutrition", active: priorities.includes("nutritional_health") },
+                { name: "Screen Time", active: priorities.includes("digital_wellness") },
+                { name: "Sleep", active: true },
+                { name: "Spending", active: false },
+                { name: "Social", active: false },
+                { name: "Work Stress", active: false },
               ].map((s) => (
-                <div key={s.name} className="p-2.5 rounded-lg bg-surface-light text-center">
-                  <p className={`text-xs font-medium ${s.active ? s.color : "text-muted/50"}`}>{s.name}</p>
-                  <p className="text-[10px] text-muted/50 mt-0.5">{s.active ? "Collecting" : "Pending"}</p>
+                <div key={s.name} className={`p-2.5 rounded-lg text-center ${s.active ? "bg-accent/5 border border-accent/10" : "bg-surface-light"}`}>
+                  <p className={`text-xs font-medium ${s.active ? "text-accent" : "text-muted/40"}`}>{s.name}</p>
+                  <p className="text-[10px] text-muted/40 mt-0.5">{s.active ? "Active" : "Pending"}</p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* Connect apps */}
-        <div className="mt-6 p-5 rounded-xl border border-dashed border-white/10 text-center">
-          <p className="text-xs text-muted mb-3">Connect apps to enrich PAUSE with real data.</p>
-          <button className="px-4 py-2 rounded-lg bg-surface-light border border-white/10 text-xs font-medium hover:border-accent/20 transition-colors">
-            Connect apps (coming soon)
-          </button>
-        </div>
-
-        {/* Start over link */}
-        <div className="text-center mt-8">
-          <Link href="/auth" className="text-xs text-muted/30 hover:text-muted transition-colors">
-            Start over
-          </Link>
+          {/* Connected apps */}
+          <div className="p-5 rounded-xl bg-surface border border-white/5 md:col-span-2">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs text-muted uppercase tracking-wider">Connected apps</h3>
+              <Link href="/connect-apps" className="text-xs text-accent hover:text-accent-soft transition-colors">
+                Manage
+              </Link>
+            </div>
+            {connectedApps.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {connectedApps.map((app) => (
+                  <span key={app} className="px-2.5 py-1 rounded-full bg-surface-light text-xs text-muted">{app}</span>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-xs text-muted mb-2">No apps connected yet.</p>
+                <Link href="/connect-apps" className="text-xs text-accent hover:text-accent-soft transition-colors">
+                  Connect apps
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>

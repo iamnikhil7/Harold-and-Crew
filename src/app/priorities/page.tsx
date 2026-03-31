@@ -15,7 +15,7 @@ export default function PrioritiesPage() {
   const handleContinue = () => {
     if (selected.size === 0) return;
     localStorage.setItem("pause_priorities", JSON.stringify(Array.from(selected)));
-    router.push("/dashboard");
+    router.push("/connect-apps");
   };
 
   return (
