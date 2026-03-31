@@ -99,7 +99,7 @@ export default function Home() {
             </div>
             <span className="text-lg font-semibold tracking-tight">PAUSE</span>
           </div>
-          <Link href="/onboarding" className="text-sm font-medium px-5 py-2 rounded-full bg-accent text-white hover:bg-accent-soft transition-colors">
+          <Link href="/auth" className="text-sm font-medium px-5 py-2 rounded-full bg-accent text-white hover:bg-accent-soft transition-colors">
             Get Started
           </Link>
         </div>
@@ -127,7 +127,7 @@ export default function Home() {
             PAUSE detects your vulnerability moments and delivers a signature three-layer pause — so you can respond as the person you want to be, not the person your habits have made you.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up-delay-3">
-            <Link href="/onboarding" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-full bg-accent text-white animate-pulse-glow hover:bg-accent-soft transition-all">
+            <Link href="/auth" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-full bg-accent text-white animate-pulse-glow hover:bg-accent-soft transition-all">
               Get Started
             </Link>
             <a href="#how-it-works" className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-full border border-white/10 text-foreground hover:bg-surface-light transition-all">
