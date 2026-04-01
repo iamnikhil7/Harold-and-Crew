@@ -146,10 +146,10 @@ export default function HaroldPage() {
       <div className="min-h-screen relative"><Navbar />
         <div className="fixed inset-0 z-40 flex items-start justify-center pt-24" style={{ background: "rgba(5,5,8,0.65)", backdropFilter: "blur(4px)" }} onClick={() => setPhase("narration")}>
           <div className="max-w-sm w-full mx-6 p-5 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all" style={{ background: "rgba(37,41,52,0.95)", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
-            <p className="text-[11px] uppercase tracking-[0.15em] text-muted/40 mb-2">Attune</p>
-            <p className="text-foreground/90 leading-relaxed">{notificationMsg}</p>
+            <p className="text-xs uppercase tracking-widest text-muted/40 mb-2">Attune</p>
+            <p className="text-sm text-muted/60 leading-relaxed">{notificationMsg}</p>
             {detectedPatterns.length > 0 && (
-              <p className="text-[11px] text-muted/30 mt-2">{detectedPatterns.length} pattern{detectedPatterns.length > 1 ? "s" : ""} detected this week</p>
+              <p className="text-xs text-muted/40 mt-2">{detectedPatterns.length} pattern{detectedPatterns.length > 1 ? "s" : ""} detected this week</p>
             )}
           </div>
         </div>
@@ -174,10 +174,10 @@ export default function HaroldPage() {
     return (
       <div className="min-h-screen bg-background"><Navbar />
         <div className="max-w-md mx-auto px-6 pt-24 pb-12 flex flex-col items-center">
-          <p className="text-[11px] uppercase tracking-[0.15em] text-muted/40 mb-6">Harold &bull; Heart Insight</p>
+          <p className="text-xs uppercase tracking-widest text-muted/40 mb-6">Harold &bull; Heart Insight</p>
           <div className="flex gap-2 mb-6">
             {Object.values(scenarios).map((s) => (
-              <button key={s.id} onClick={() => switchScenario(s.id)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeScenario === s.id ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>
+              <button key={s.id} onClick={() => switchScenario(s.id)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${activeScenario === s.id ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>
                 {s.label}
               </button>
             ))}
@@ -186,12 +186,12 @@ export default function HaroldPage() {
           {/* Dynamic pattern badge */}
           {dynamicPattern && phase === "narration" && (
             <div className="mb-4 px-3 py-1 rounded-full bg-harold/10 border border-harold/20">
-              <p className="text-[10px] text-harold">{dynamicPattern.severity} &middot; {dynamicPattern.title}</p>
+              <p className="text-[0.625rem] text-harold">{dynamicPattern.severity} &middot; {dynamicPattern.title}</p>
             </div>
           )}
 
           {showSkip && phase === "narration" && (
-            <button onClick={() => { clearAllTimers(); setShowSkip(false); setPhase("summary"); }} className="self-end px-3 py-1 rounded-full border border-border text-muted/40 text-[11px] hover:text-foreground transition-colors mb-4">
+            <button onClick={() => { clearAllTimers(); setShowSkip(false); setPhase("summary"); }} className="self-end px-3 py-1 rounded-full border border-border text-muted/40 text-sm font-medium hover:text-foreground transition-colors mb-4">
               See summary
             </button>
           )}
@@ -200,14 +200,14 @@ export default function HaroldPage() {
 
           {phase === "summary" ? (
             <div className="text-center mb-8 animate-in">
-              <h3 className="text-lg font-medium mb-4">Summary</h3>
+              <h3 className="text-lg mb-4">Summary</h3>
               <div className="space-y-3">
                 {scenario.summary.map((line, i) => (<p key={i} className="text-sm text-muted/60 leading-relaxed">{line}</p>))}
               </div>
               {dynamicPattern && (
                 <div className="mt-4 p-3 rounded-xl bg-surface border border-border text-left">
-                  <p className="text-[10px] text-muted/30 mb-1">From your data</p>
-                  <p className="text-xs text-muted/60">{dynamicPattern.insight}</p>
+                  <p className="text-[0.625rem] text-muted/30 mb-1">From your data</p>
+                  <p className="text-sm text-muted/60 leading-relaxed">{dynamicPattern.insight}</p>
                 </div>
               )}
             </div>
@@ -222,7 +222,7 @@ export default function HaroldPage() {
             </div>
           )}
 
-          <Link href="/" className="mt-8 text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          <Link href="/" className="mt-8 text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
         </div>
       </div>
     );
@@ -251,18 +251,18 @@ export default function HaroldPage() {
 
           <div className="space-y-6 mb-8">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">What Harold noticed</p>
-              <p className="text-sm leading-relaxed">{dynamicPattern ? dynamicPattern.insight : scenario.noticed}</p>
+              <p className="text-xs uppercase tracking-widest text-muted/40 mb-2">What Harold noticed</p>
+              <p className="text-sm text-muted/60 leading-relaxed">{dynamicPattern ? dynamicPattern.insight : scenario.noticed}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Why it may matter</p>
-              <p className="text-sm leading-relaxed">{dynamicPattern ? dynamicPattern.matter : scenario.matter}</p>
+              <p className="text-xs uppercase tracking-widest text-muted/40 mb-2">Why it may matter</p>
+              <p className="text-sm text-muted/60 leading-relaxed">{dynamicPattern ? dynamicPattern.matter : scenario.matter}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">3 simple next steps</p>
+              <p className="text-xs uppercase tracking-widest text-muted/40 mb-2">3 simple next steps</p>
               <ol className="space-y-2">
                 {(dynamicPattern ? dynamicPattern.steps : scenario.steps).map((step, i) => (
-                  <li key={i} className="text-sm leading-relaxed flex gap-2"><span className="text-accent/60 font-medium">{i + 1}.</span>{step}</li>
+                  <li key={i} className="text-sm text-muted/60 leading-relaxed flex gap-2"><span className="text-accent/60 font-medium">{i + 1}.</span>{step}</li>
                 ))}
               </ol>
             </div>
@@ -270,11 +270,11 @@ export default function HaroldPage() {
             {/* Real data points if available */}
             {dynamicPattern && dynamicPattern.dataPoints.length > 0 && (
               <div>
-                <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Your numbers</p>
+                <p className="text-xs uppercase tracking-widest text-muted/40 mb-2">Your numbers</p>
                 <div className="flex flex-wrap gap-3">
                   {dynamicPattern.dataPoints.map((dp, i) => (
                     <div key={i} className="px-3 py-2 rounded-xl bg-surface border border-border">
-                      <p className="text-[10px] text-muted/30">{dp.label}</p>
+                      <p className="text-[0.625rem] text-muted/40">{dp.label}</p>
                       <p className="text-sm font-medium">{dp.value}</p>
                     </div>
                   ))}
@@ -299,30 +299,30 @@ export default function HaroldPage() {
           {!showContextResult ? (
             <div className="animate-in">
               <h2 className="text-2xl mb-2">Make this more relevant</h2>
-              <p className="text-sm text-muted/50 mb-8">Takes a few seconds.</p>
+              <p className="text-sm text-muted/60 leading-relaxed mb-8">Takes a few seconds.</p>
               <div className="mb-6">
                 <p className="text-sm font-medium mb-3">What kind of week?</p>
                 <div className="flex gap-2">
-                  {["Busy", "Normal", "Exhausting"].map((o) => (<button key={o} onClick={() => setContextWeek(o)} className={`px-4 py-2 rounded-full text-sm transition-all ${contextWeek === o ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>{o}</button>))}
+                  {["Busy", "Normal", "Exhausting"].map((o) => (<button key={o} onClick={() => setContextWeek(o)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${contextWeek === o ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>{o}</button>))}
                 </div>
               </div>
               <div className="mb-8">
                 <p className="text-sm font-medium mb-3">What kind of work?</p>
                 <div className="flex flex-wrap gap-2">
-                  {["Desk", "Office", "Active", "On your feet", "Student", "Other"].map((o) => (<button key={o} onClick={() => setContextWork(o)} className={`px-4 py-2 rounded-full text-sm transition-all ${contextWork === o ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>{o}</button>))}
+                  {["Desk", "Office", "Active", "On your feet", "Student", "Other"].map((o) => (<button key={o} onClick={() => setContextWork(o)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${contextWork === o ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>{o}</button>))}
                 </div>
               </div>
               <button onClick={() => setShowContextResult(true)} disabled={!contextWeek || !contextWork} className={`w-full py-3 rounded-full text-sm font-medium transition-all ${contextWeek && contextWork ? "bg-white text-background hover:opacity-90" : "bg-white/[0.03] text-muted/15 cursor-not-allowed"}`}>Continue</button>
             </div>
           ) : (
             <div className="animate-in">
-              <p className="text-lg leading-relaxed mb-8">
+              <p className="text-sm text-muted/60 leading-relaxed mb-8">
                 Got it&hellip; during <span className="text-harold">{contextWeek.toLowerCase()}</span> weeks, your body carries more baseline stress. I&apos;ll keep that in mind around <span className="text-harold">{contextWork.toLowerCase()}</span> work and tune future insights accordingly.
               </p>
               <button onClick={() => setPhase("health")} className="w-full py-3 rounded-full border border-border text-sm font-medium hover:bg-white/[0.03] transition-all">
                 View your health data
               </button>
-              <Link href="/" className="block mt-4 text-center text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+              <Link href="/" className="block mt-4 text-center text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
             </div>
           )}
         </div>
@@ -336,12 +336,12 @@ export default function HaroldPage() {
       <div className="min-h-screen bg-background"><Navbar />
         <div className="max-w-md mx-auto px-6 pt-24 pb-12 flex flex-col items-center justify-center min-h-[60vh]">
           <div className="p-6 rounded-2xl border border-border text-center animate-in mb-8">
-            <p className="text-lg leading-relaxed">{scenario.ack}</p>
+            <p className="text-sm text-muted/60 leading-relaxed">{scenario.ack}</p>
           </div>
-          <button onClick={() => setPhase("health")} className="px-6 py-2.5 rounded-full border border-border text-sm text-muted/50 hover:text-foreground transition-all mb-3">
+          <button onClick={() => setPhase("health")} className="px-6 py-2.5 rounded-full border border-border text-sm font-medium text-muted/50 hover:text-foreground transition-all mb-3">
             View your health data
           </button>
-          <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">Home</Link>
+          <Link href="/" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">Home</Link>
         </div>
       </div>
     );
@@ -358,20 +358,20 @@ export default function HaroldPage() {
         <div className="max-w-3xl mx-auto px-6 pt-24 pb-16">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.15em] text-muted/40 mb-1">Harold &bull; Health Data</p>
+              <p className="text-xs uppercase tracking-widest text-muted/40 mb-1">Harold &bull; Health Data</p>
               <h1 className="text-2xl">Your week at a glance</h1>
             </div>
-            <button onClick={() => setPhase("notification")} className="px-4 py-2 rounded-full text-xs font-medium" style={{ background: "#FF8897", color: "#0B0B0B" }}>
+            <button onClick={() => setPhase("notification")} className="px-4 py-2 rounded-full text-sm font-medium" style={{ background: "#FF8897", color: "#0B0B0B" }}>
               Back to Harold
             </button>
           </div>
 
           {/* Simulation profile */}
           <div className="p-4 rounded-2xl bg-surface border border-border mb-6">
-            <p className="text-xs text-muted/40 mb-3">Simulate a health profile</p>
+            <p className="text-xs uppercase tracking-widest text-muted/40 mb-3">Simulate a health profile</p>
             <div className="flex flex-wrap gap-2">
               {(["healthy", "stressed", "declining", "recovering"] as SimProfile[]).map((p) => (
-                <button key={p} onClick={() => { setHealthProfile(p); loadHealthData(p); }} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${healthProfile === p ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>
+                <button key={p} onClick={() => { setHealthProfile(p); loadHealthData(p); }} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${healthProfile === p ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>
                   {p.charAt(0).toUpperCase() + p.slice(1)}
                 </button>
               ))}
@@ -381,7 +381,7 @@ export default function HaroldPage() {
           {/* Detected Patterns */}
           {detectedPatterns.length > 0 && (
             <div className="mb-8">
-              <p className="text-xs uppercase tracking-[0.15em] text-muted/40 mb-4">Detected patterns</p>
+              <p className="text-xs uppercase tracking-widest text-muted/40 mb-4">Detected patterns</p>
               <div className="space-y-3">
                 {detectedPatterns.map((p, i) => (
                   <div key={i} className="p-5 rounded-2xl bg-surface border border-border">
@@ -415,7 +415,7 @@ export default function HaroldPage() {
 
           {/* Daily Grid */}
           <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.15em] text-muted/40 mb-4">Daily metrics</p>
+            <p className="text-xs uppercase tracking-widest text-muted/40 mb-4">Daily metrics</p>
             <div className="overflow-x-auto">
               <div className="grid grid-cols-7 gap-2 min-w-[600px]">
                 {healthDays.map((d) => {
@@ -423,7 +423,7 @@ export default function HaroldPage() {
                   const sc = d.stressScore > 70 ? "border-red-500/20 bg-red-500/[0.03]" : d.stressScore > 50 ? "border-orange-500/20 bg-orange-500/[0.03]" : "border-border";
                   return (
                     <div key={d.date} className={`p-3 rounded-xl bg-surface border ${sc} text-center`}>
-                      <p className="text-[10px] text-muted/40 mb-2">{dayName}</p>
+                      <p className="text-[0.625rem] text-muted/40 mb-2">{dayName}</p>
                       <p className="text-xs font-medium mb-1">{d.rhr} <span className="text-muted/30">bpm</span></p>
                       <p className="text-xs text-muted/50">{d.sleepHours}h</p>
                       <p className="text-xs text-muted/50">{d.steps.toLocaleString()}</p>
@@ -437,7 +437,7 @@ export default function HaroldPage() {
             </div>
           </div>
 
-          <Link href="/" className="block text-center text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          <Link href="/" className="block text-center text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
         </div>
       </div>
     );

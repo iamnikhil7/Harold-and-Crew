@@ -80,15 +80,15 @@ export default function PausePage() {
     <div className="min-h-screen bg-background"><Navbar />
       <div className="min-h-screen flex items-center justify-center px-6 pt-16">
         <div className="max-w-sm text-center animate-in">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-8">Behavioral Intelligence</p>
-          <h1 className="font-serif text-4xl sm:text-5xl italic leading-[1.15] mb-6" style={{ color: "#E85D3A" }}>PAUSE</h1>
+          <p className="text-xs uppercase tracking-widest text-muted/40 mb-8">Behavioral Intelligence</p>
+          <h1 className="text-4xl sm:text-5xl leading-[1.15] mb-6" style={{ color: "#E85D3A" }}>PAUSE</h1>
           <p className="text-lg text-foreground/90 mb-2">You don&apos;t need more willpower.</p>
           <p className="text-muted/50 text-sm mb-12">You need awareness at the right moment.</p>
           <button onClick={() => setPhase("safety")} className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
             Begin
           </button>
           <div className="mt-8">
-            <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+            <Link href="/" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
           </div>
         </div>
       </div>
@@ -100,8 +100,8 @@ export default function PausePage() {
     <div className="min-h-screen bg-background"><Navbar />
       <div className="min-h-screen flex items-center justify-center px-6 pt-16">
         <div className="max-w-sm animate-in">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-6">Before we begin</p>
-          <p className="font-serif text-xl italic leading-relaxed mb-6 text-foreground/90">Some of what we explore touches on food, body image, and health habits.</p>
+          <p className="text-xs uppercase tracking-widest text-muted/40 mb-6">Before we begin</p>
+          <p className="text-xl leading-relaxed mb-6 text-foreground/90">Some of what we explore touches on food, body image, and health habits.</p>
           <p className="text-sm text-muted/50 mb-6">Do any of these feel sensitive right now?</p>
           <div className="space-y-2">
             <button onClick={() => { setSensitivityChoice("gentle"); setPhase("safety_confirm"); }} className={`w-full text-left px-5 py-4 rounded-2xl border text-sm transition-all ${sensitivityChoice === "gentle" ? "border-pause-orange/30 bg-pause-orange/[0.05]" : "border-border hover:border-white/10"}`}>
@@ -123,7 +123,7 @@ export default function PausePage() {
         <div className="max-w-sm animate-in">
           {/* Notification-style confirmation */}
           <div className="p-5 rounded-2xl border border-border bg-surface mb-6">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/40 mb-3">Attune</p>
+            <p className="text-[0.625rem] uppercase tracking-wider text-muted/40 mb-3">Attune</p>
             <p className="text-sm text-foreground/80 leading-relaxed">
               {sensitivityChoice === "gentle"
                 ? "We'll use softer language throughout. You can change this anytime. Nothing here is meant to pressure you."
@@ -134,7 +134,7 @@ export default function PausePage() {
           <button onClick={() => setPhase("onboarding")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
             Continue to questions
           </button>
-          <button onClick={() => setPhase("safety")} className="w-full mt-3 py-2 text-[11px] text-muted/30 hover:text-muted/50 transition-colors">
+          <button onClick={() => setPhase("safety")} className="w-full mt-3 py-2 text-xs text-muted/30 hover:text-muted/50 transition-colors">
             Go back
           </button>
         </div>
@@ -147,8 +147,8 @@ export default function PausePage() {
     <div className="min-h-screen bg-background"><Navbar />
       <div className="max-w-3xl mx-auto px-6 pt-24 pb-16">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] text-muted/30 tracking-wide">{qIndex + 1} / {pauseQuestions.length}</span>
-          <span className="text-[11px] text-muted/30 tracking-wide">{q.section}</span>
+          <span className="text-xs text-muted/30 tracking-wide">{qIndex + 1} / {pauseQuestions.length}</span>
+          <span className="text-xs text-muted/30 tracking-wide">{q.section}</span>
         </div>
         <div className="flex gap-1 mb-12">
           {pauseQuestions.map((_, i) => (
@@ -156,7 +156,7 @@ export default function PausePage() {
           ))}
         </div>
 
-        <h2 className="font-serif text-2xl sm:text-3xl italic leading-snug mb-2">{q.text}</h2>
+        <h2 className="text-2xl sm:text-3xl leading-snug mb-2">{q.text}</h2>
         <p className="text-sm text-muted/40 mb-10">{q.subtitle}</p>
 
         {q.type === "single" && q.options && (
@@ -166,8 +166,8 @@ export default function PausePage() {
               return (
                 <button key={opt.value} onClick={() => handleCardSelect(opt.value)} className={`text-left p-5 rounded-2xl border transition-all hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
                   <span className="text-2xl block mb-3">{opt.emoji}</span>
-                  <p className="text-[13px] font-medium leading-tight">{opt.label}</p>
-                  <p className="text-[11px] text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>
+                  <p className="text-sm font-medium leading-tight">{opt.label}</p>
+                  <p className="text-xs text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>
                 </button>
               );
             })}
@@ -182,8 +182,8 @@ export default function PausePage() {
                 return (
                   <button key={opt.value} onClick={() => handleMultiToggle(opt.value)} className={`text-left p-5 rounded-2xl border transition-all hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
                     <span className="text-2xl block mb-3">{opt.emoji}</span>
-                    <p className="text-[13px] font-medium leading-tight">{opt.label}</p>
-                    <p className="text-[11px] text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>
+                    <p className="text-sm font-medium leading-tight">{opt.label}</p>
+                    <p className="text-xs text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>
                   </button>
                 );
               })}
@@ -196,7 +196,7 @@ export default function PausePage() {
 
         {q.type === "text" && (
           <>
-            <textarea value={personalWhy} onChange={(e) => setPersonalWhy(e.target.value)} placeholder="Because I want to\u2026" rows={4} className="w-full bg-transparent border-b border-border px-0 py-4 text-xl font-serif italic text-foreground placeholder:text-muted/15 focus:outline-none focus:border-pause-orange/30 resize-none mb-6" />
+            <textarea value={personalWhy} onChange={(e) => setPersonalWhy(e.target.value)} placeholder="Because I want to\u2026" rows={4} className="w-full bg-transparent border-b border-border px-0 py-4 text-xl serif text-foreground placeholder:text-muted/15 focus:outline-none focus:border-pause-orange/30 resize-none mb-6" />
             <button onClick={() => { setAnswers((p) => ({ ...p, [q.id]: personalWhy })); finishOnboarding(); }} disabled={personalWhy.trim().length < 5} className={`w-full py-3.5 rounded-full text-sm font-medium tracking-wide transition-all ${personalWhy.trim().length >= 5 ? "hover:opacity-90" : "bg-white/[0.03] text-muted/15 cursor-not-allowed"}`} style={personalWhy.trim().length >= 5 ? { background: "#E85D3A", color: "#0A0A0F" } : {}}>
               Seal it
             </button>
@@ -205,7 +205,7 @@ export default function PausePage() {
 
         {/* Back button for questions */}
         {qIndex > 0 && (
-          <button onClick={() => setQIndex((i) => i - 1)} className="mt-4 text-[11px] text-muted/20 hover:text-muted/40 transition-colors">
+          <button onClick={() => setQIndex((i) => i - 1)} className="mt-4 text-xs text-muted/20 hover:text-muted/40 transition-colors">
             &larr; Previous question
           </button>
         )}
@@ -229,26 +229,26 @@ export default function PausePage() {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-lg font-semibold">{archetype.baseline}%</span>
-              <span className="text-[9px] text-muted/40">baseline</span>
+              <span className="text-[0.5rem] text-muted/40">baseline</span>
             </div>
           </div>
 
-          <h1 className="font-serif text-3xl italic mb-3" style={{ color: archetype.color }}>{archetype.name}</h1>
+          <h1 className="text-3xl mb-3" style={{ color: archetype.color }}>{archetype.name}</h1>
           <p className="text-sm text-muted/70 leading-relaxed mb-6 max-w-xs mx-auto">{archetype.description}</p>
 
           {/* Traits */}
           <div className="flex flex-wrap justify-center gap-2 mb-6">
             {archetype.traits.map((t) => (
-              <span key={t} className="px-3 py-1 rounded-full text-[11px] border border-border text-muted/50">{t}</span>
+              <span key={t} className="px-3 py-1 rounded-full text-xs border border-border text-muted/50">{t}</span>
             ))}
           </div>
 
           {/* Trigger Points — what to watch for */}
           <div className="p-4 rounded-2xl bg-surface border border-border mb-6 text-left">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-3">Watch for these patterns</p>
+            <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-3">Watch for these patterns</p>
             <div className="space-y-2">
               {archetype.traits.map((t, i) => (
-                <p key={i} className="text-[12px] text-muted/50 flex items-center gap-2">
+                <p key={i} className="text-xs text-muted/50 flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full shrink-0" style={{ background: archetype.color }} />
                   {t}
                 </p>
@@ -259,15 +259,15 @@ export default function PausePage() {
           {/* Your Why */}
           {personalWhy && (
             <div className="p-5 rounded-2xl bg-surface border border-border mb-8 text-left">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Your why</p>
-              <p className="font-serif italic text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
+              <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-2">Your why</p>
+              <p className="serif text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
             </div>
           )}
 
           {/* What happens next */}
           <div className="p-4 rounded-2xl bg-surface-light/50 border border-border mb-8 text-left">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">What happens now</p>
-            <p className="text-[12px] text-muted/50 leading-relaxed">
+            <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-2">What happens now</p>
+            <p className="text-xs text-muted/50 leading-relaxed">
               Now that we know your patterns, PAUSE will watch silently for 7 days. After that, when a recurring vulnerability is detected, you&apos;ll see your words at the moment you need them most.
             </p>
           </div>
@@ -284,8 +284,8 @@ export default function PausePage() {
   if (phase === "priorities") return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="max-w-sm mx-auto px-6 pt-24 pb-16 animate-in">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-3">Focus areas</p>
-        <h2 className="font-serif text-2xl italic mb-8">What matters most to you?</h2>
+        <p className="text-xs uppercase tracking-widest text-muted/40 mb-3">Focus areas</p>
+        <h2 className="text-2xl mb-8">What matters most to you?</h2>
         <div className="space-y-3 mb-8">
           {[
             { id: "physical", label: "Physical Health", sub: "Movement, fitness, recovery" },
@@ -296,7 +296,7 @@ export default function PausePage() {
             return (
               <button key={p.id} onClick={() => setPriorities((prev) => { const n = new Set(prev); n.has(p.id) ? n.delete(p.id) : n.add(p.id); return n; })} className={`w-full text-left px-5 py-4 rounded-2xl border transition-all ${active ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border hover:border-white/10"}`}>
                 <p className="text-sm font-medium">{p.label}</p>
-                <p className="text-[11px] text-muted/40 mt-0.5">{p.sub}</p>
+                <p className="text-xs text-muted/40 mt-0.5">{p.sub}</p>
               </button>
             );
           })}
@@ -315,8 +315,8 @@ export default function PausePage() {
         <div className="flex items-center gap-4 mb-8">
           <Avatar archetypeColor={avatarColor} state={resisted > 3 ? "glowing" : resisted > 0 ? "celebrating" : "neutral"} size="md" />
           <div>
-            <p className="font-serif italic text-lg" style={{ color: archetype?.color }}>{archetype?.name}</p>
-            <p className="text-[11px] text-muted/40">{points} points &middot; {resisted} resisted</p>
+            <p className="text-lg" style={{ color: archetype?.color }}>{archetype?.name}</p>
+            <p className="text-xs text-muted/40">{points} points &middot; {resisted} resisted</p>
           </div>
         </div>
 
@@ -324,20 +324,20 @@ export default function PausePage() {
           {[{ v: points, l: "Points", c: "#E85D3A" }, { v: resisted, l: "Resisted", c: "#6BE8A0" }, { v: totalPauses, l: "Pauses", c: undefined }].map((s) => (
             <div key={s.l} className="p-3 rounded-2xl bg-surface border border-border text-center">
               <p className="text-lg font-semibold" style={s.c ? { color: s.c } : {}}>{s.v}</p>
-              <p className="text-[10px] text-muted/30">{s.l}</p>
+              <p className="text-[0.625rem] text-muted/30">{s.l}</p>
             </div>
           ))}
         </div>
 
         {personalWhy && (
           <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Your why</p>
-            <p className="font-serif italic text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
+            <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-2">Your why</p>
+            <p className="serif text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
           </div>
         )}
 
         <div className="p-4 rounded-2xl bg-surface border border-border mb-6">
-          <div className="flex justify-between text-[11px] text-muted/30 mb-2"><span>Graduation</span><span>{points} / 200</span></div>
+          <div className="flex justify-between text-xs text-muted/30 mb-2"><span>Graduation</span><span>{points} / 200</span></div>
           <div className="w-full h-1 bg-white/[0.03] rounded-full overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (points / 200) * 100)}%`, background: "#E85D3A" }} />
           </div>
@@ -348,7 +348,7 @@ export default function PausePage() {
         </button>
 
         <div className="mt-8 text-center">
-          <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          <Link href="/" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
         </div>
       </div>
     </div>
@@ -359,15 +359,15 @@ export default function PausePage() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
         <div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="concerned" size="md" /></div>
-        <p className="text-[10px] uppercase tracking-[0.2em] text-muted/30 mb-4">You said this mattered</p>
-        <p className="font-serif text-2xl italic leading-relaxed mb-6">&ldquo;{personalWhy}&rdquo;</p>
+        <p className="text-[0.625rem] uppercase tracking-widest text-muted/30 mb-4">You said this mattered</p>
+        <p className="text-2xl leading-relaxed mb-6">&ldquo;{personalWhy}&rdquo;</p>
         <p className="text-sm mb-10" style={{ color: archetype?.color }}>Pattern detected &middot; This is a recurring moment.</p>
         <div className="space-y-2.5 w-full">
           <button onClick={handleResist} className="w-full py-3 rounded-full text-sm font-medium transition-all" style={{ background: "rgba(107,232,160,0.08)", color: "#6BE8A0" }}>I&apos;ll resist</button>
           <button onClick={handleModify} className="w-full py-3 rounded-full border text-sm font-medium transition-all" style={{ borderColor: "rgba(232,168,58,0.15)", color: "rgba(232,168,58,0.7)" }}>Modify choice</button>
           <button onClick={handleOverride} className="w-full py-3 rounded-full text-sm text-muted/20 hover:text-muted/40 transition-colors">Override</button>
         </div>
-        <button onClick={() => setPhase("dashboard")} className="mt-6 text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to dashboard</button>
+        <button onClick={() => setPhase("dashboard")} className="mt-6 text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to dashboard</button>
       </div>
     </div>
   );
@@ -377,7 +377,7 @@ export default function PausePage() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
         <div className="w-4 h-4 rounded-full border border-white/10 mx-auto mb-10 flex items-center justify-center"><div className="w-1.5 h-1.5 rounded-full bg-white/20" /></div>
-        <p className="font-serif text-xl italic text-muted/50 mb-10">Noted. No judgment. Just witnessing.</p>
+        <p className="text-xl text-muted/50 mb-10">Noted. No judgment. Just witnessing.</p>
         <div className="space-y-2.5 w-full">
           <button onClick={handleResist} className="w-full py-3 rounded-full text-sm font-medium" style={{ background: "rgba(107,232,160,0.08)", color: "#6BE8A0" }}>Actually, I&apos;ll resist</button>
           <button onClick={() => { setOutcome("overrode"); setTotalPauses((t) => t + 1); setOverrideCount((c) => c + 1); setPhase("result"); }} className="w-full py-3 rounded-full text-sm text-muted/15 hover:text-muted/30 transition-colors">Continue anyway</button>
@@ -390,14 +390,14 @@ export default function PausePage() {
   if (phase === "result") return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
-        {outcome === "resisted" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="glowing" size="lg" /></div><h2 className="font-serif text-2xl italic mb-2">You resisted.</h2><p className="text-sm text-muted/40">+15 points</p></>)}
-        {outcome === "modified" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="celebrating" size="lg" /></div><h2 className="font-serif text-2xl italic mb-2">Modified. That counts.</h2><p className="text-sm text-muted/40">+10 points</p></>)}
-        {outcome === "overrode" && (<><h2 className="font-serif text-2xl italic mb-2">Noted.</h2><p className="text-sm text-muted/20">No judgment. Every response helps.</p></>)}
+        {outcome === "resisted" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="glowing" size="lg" /></div><h2 className="text-2xl mb-2">You resisted.</h2><p className="text-sm text-muted/40">+15 points</p></>)}
+        {outcome === "modified" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="celebrating" size="lg" /></div><h2 className="text-2xl mb-2">Modified. That counts.</h2><p className="text-sm text-muted/40">+10 points</p></>)}
+        {outcome === "overrode" && (<><h2 className="text-2xl mb-2">Noted.</h2><p className="text-sm text-muted/20">No judgment. Every response helps.</p></>)}
         <button onClick={() => setPhase("dashboard")} className="mt-8 px-8 py-3 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
           Back to dashboard
         </button>
         <div className="mt-4">
-          <Link href="/" className="text-[11px] text-muted/15 hover:text-muted/30 transition-colors">Home</Link>
+          <Link href="/" className="text-xs text-muted/15 hover:text-muted/30 transition-colors">Home</Link>
         </div>
       </div>
     </div>

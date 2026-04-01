@@ -48,7 +48,7 @@ export default function Home() {
       {/* About Us */}
       <section id="about" className="py-24 px-6 border-t border-white/[0.04]">
         <div className="max-w-2xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.15em] text-muted/50 mb-6">About Attune</p>
+          <p className="text-xs uppercase tracking-wider text-muted/50 mb-6">About Attune</p>
           <h2 className="text-3xl sm:text-4xl leading-[1.15] mb-8">
             Closing the gap between data and awareness
           </h2>
@@ -69,7 +69,7 @@ export default function Home() {
       {/* Video */}
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.15em] text-muted/40 mb-4 text-center">A look at life, awareness, and the moments in between</p>
+          <p className="text-xs uppercase tracking-wider text-muted/40 mb-4 text-center">A look at life, awareness, and the moments in between</p>
           <div className="aspect-video rounded-2xl bg-surface border border-border flex items-center justify-center">
             <div className="text-center">
               <div className="w-14 h-14 rounded-full border border-white/[0.06] flex items-center justify-center mx-auto mb-3" style={{ animation: "breathe-circle 4s ease-in-out infinite" }}>
@@ -84,14 +84,14 @@ export default function Home() {
       {/* Features */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.04]">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.15em] text-harold/50 mb-3">Features</p>
+          <p className="text-xs uppercase tracking-wider text-harold/50 mb-3">Features</p>
           <h2 className="text-3xl mb-12">Three agents, one mission</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {features.map((f) => (
               <Link key={f.name} href={f.href} className={`group p-6 rounded-2xl bg-surface border border-border hover:border-white/[0.08] transition-all ${f.status === "Coming Soon" ? "opacity-50" : ""}`}>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-lg font-medium" style={{ color: f.color }}>{f.name}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] text-muted/40">{f.status}</span>
+                  <span className="text-[0.625rem] px-2 py-0.5 rounded-full bg-white/[0.04] text-muted/40">{f.status}</span>
                 </div>
                 <p className="text-sm font-medium mb-2">{f.tagline}</p>
                 <p className="text-sm text-muted/50 leading-relaxed">{f.desc}</p>
@@ -104,7 +104,7 @@ export default function Home() {
       {/* How it Works */}
       <section id="how-it-works" className="py-24 px-6 border-t border-white/[0.04]">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.15em] text-accent/50 mb-3">How it works</p>
+          <p className="text-xs uppercase tracking-wider text-accent/50 mb-3">How it works</p>
           <h2 className="text-3xl mb-12">Five steps to awareness</h2>
           <div className="grid sm:grid-cols-5 gap-3">
             {steps.map((s) => (
