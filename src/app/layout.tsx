@@ -2,16 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PAUSE — Your Behavioral Intelligence Layer",
-  description:
-    "PAUSE detects your vulnerability moments and delivers a signature three-layer pause to help you resist unwanted habits. Build behavioral intelligence, not willpower.",
+  title: "Attune — Health Awareness That Fits Your Life",
+  description: "Attune transforms your health data into moments of awareness — delivered when you're actually ready to notice.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
