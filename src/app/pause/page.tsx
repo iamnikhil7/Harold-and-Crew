@@ -75,6 +75,7 @@ export default function PausePage() {
   const [connectedApps, setConnectedApps] = useState<Set<string>>(new Set());
   const [problemApps, setProblemApps] = useState<Set<string>>(new Set());
   const [flagExpanded, setFlagExpanded] = useState(false);
+  const [cameFromDashboard, setCameFromDashboard] = useState(false);
   const [points, setPoints] = useState(0);
   const [resisted, setResisted] = useState(0);
   const [totalPauses, setTotalPauses] = useState(0);
@@ -439,9 +440,14 @@ export default function PausePage() {
             </div>
           )}
 
-          <button onClick={() => setPhase("dashboard")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E8A83A", color: "#0A0A0F" }}>
-            {connectedCount > 0 ? `Continue with ${connectedCount} app${connectedCount > 1 ? "s" : ""}` : "Skip for now"}
+          <button onClick={() => { setPhase("dashboard"); setCameFromDashboard(false); }} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E8A83A", color: "#0A0A0F" }}>
+            {cameFromDashboard ? "Save changes" : connectedCount > 0 ? `Continue with ${connectedCount} app${connectedCount > 1 ? "s" : ""}` : "Skip for now"}
           </button>
+          {cameFromDashboard && (
+            <button onClick={() => { setPhase("dashboard"); setCameFromDashboard(false); }} className="w-full mt-3 py-2 text-xs text-muted/30 hover:text-muted/50 transition-colors">
+              &larr; Back to dashboard
+            </button>
+          )}
           <p className="text-xs text-muted/30 text-center mt-3">You can connect apps anytime from settings.</p>
         </div>
       </div>
@@ -555,7 +561,7 @@ export default function PausePage() {
           <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[0.625rem] uppercase tracking-wider text-muted/30">Connected Apps</p>
-              <button onClick={() => setPhase("connect_apps")} className="text-xs text-pause-orange hover:opacity-80 transition-colors">Manage</button>
+              <button onClick={() => { setCameFromDashboard(true); setPhase("connect_apps"); }} className="text-xs text-pause-orange hover:opacity-80 transition-colors">Manage</button>
             </div>
             <div className="flex flex-wrap gap-2">
               {connectedAppNames.length > 0 ? connectedAppNames.map((app) => (
