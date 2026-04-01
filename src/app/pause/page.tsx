@@ -84,7 +84,7 @@ export default function PausePage() {
           <h1 className="text-4xl sm:text-5xl leading-[1.15] mb-6" style={{ color: "#E85D3A" }}>PAUSE</h1>
           <p className="text-lg text-foreground/90 mb-2">You don&apos;t need more willpower.</p>
           <p className="text-muted/50 text-sm mb-12">You need awareness at the right moment.</p>
-          <button onClick={() => setPhase("safety")} className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
+          <button onClick={() => setPhase("safety")} className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90 animate-glow" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
             Begin
           </button>
           <div className="mt-8">
@@ -160,11 +160,11 @@ export default function PausePage() {
         <p className="text-sm text-muted/40 mb-10">{q.subtitle}</p>
 
         {q.type === "single" && q.options && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 stagger">
             {q.options.map((opt) => {
               const sel = answers[q.id] === opt.value;
               return (
-                <button key={opt.value} onClick={() => handleCardSelect(opt.value)} className={`text-left p-5 rounded-2xl border transition-all hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
+                <button key={opt.value} onClick={() => handleCardSelect(opt.value)} className={`text-left p-5 rounded-2xl border card-hover hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
                   <span className="text-2xl block mb-3">{opt.emoji}</span>
                   <p className="text-sm font-medium leading-tight">{opt.label}</p>
                   <p className="text-xs text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>
@@ -176,11 +176,11 @@ export default function PausePage() {
 
         {q.type === "multi" && q.options && (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8 stagger">
               {q.options.map((opt) => {
                 const sel = ((answers[q.id] as string[]) || []).includes(opt.value);
                 return (
-                  <button key={opt.value} onClick={() => handleMultiToggle(opt.value)} className={`text-left p-5 rounded-2xl border transition-all hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
+                  <button key={opt.value} onClick={() => handleMultiToggle(opt.value)} className={`text-left p-5 rounded-2xl border card-hover hover:scale-[1.02] active:scale-[0.98] ${sel ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border bg-surface-light/50 hover:border-white/10"}`}>
                     <span className="text-2xl block mb-3">{opt.emoji}</span>
                     <p className="text-sm font-medium leading-tight">{opt.label}</p>
                     <p className="text-xs text-muted/50 mt-1.5 leading-snug">{opt.subtitle}</p>

@@ -70,9 +70,9 @@ export default function Home() {
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-muted/40 mb-4 text-center">A look at life, awareness, and the moments in between</p>
-          <div className="aspect-video rounded-2xl bg-surface border border-border flex items-center justify-center">
+          <div className="aspect-video rounded-2xl bg-surface border border-border flex items-center justify-center card-hover group cursor-pointer">
             <div className="text-center">
-              <div className="w-14 h-14 rounded-full border border-white/[0.06] flex items-center justify-center mx-auto mb-3" style={{ animation: "breathe-circle 4s ease-in-out infinite" }}>
+              <div className="w-14 h-14 rounded-full border border-white/[0.06] flex items-center justify-center mx-auto mb-3 group-hover:border-white/15 transition-all" style={{ animation: "breathe-circle 4s ease-in-out infinite" }}>
                 <svg className="w-5 h-5 text-white/15 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
               </div>
               <p className="text-sm text-muted/30">Coming Soon</p>
@@ -86,9 +86,9 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-harold/50 mb-3">Features</p>
           <h2 className="text-3xl mb-12">Three agents, one mission</h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4 stagger">
             {features.map((f) => (
-              <Link key={f.name} href={f.href} className={`group p-6 rounded-2xl bg-surface border border-border hover:border-white/[0.08] transition-all ${f.status === "Coming Soon" ? "opacity-50" : ""}`}>
+              <Link key={f.name} href={f.href} className={`group p-6 rounded-2xl bg-surface border border-border card-hover hover:border-white/[0.08] ${f.status === "Coming Soon" ? "opacity-50" : ""}`}>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-lg font-medium" style={{ color: f.color }}>{f.name}</span>
                   <span className="text-[0.625rem] px-2 py-0.5 rounded-full bg-white/[0.04] text-muted/40">{f.status}</span>
@@ -106,9 +106,9 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-accent/50 mb-3">How it works</p>
           <h2 className="text-3xl mb-12">Five steps to awareness</h2>
-          <div className="grid sm:grid-cols-5 gap-3">
+          <div className="grid sm:grid-cols-5 gap-3 stagger">
             {steps.map((s) => (
-              <div key={s.n} className="p-5 rounded-2xl bg-surface border border-border">
+              <div key={s.n} className="p-5 rounded-2xl bg-surface border border-border card-hover animate-shimmer">
                 <span className="text-xs font-mono text-accent/50">{s.n}</span>
                 <h3 className="text-sm font-medium mt-3 mb-1">{s.title}</h3>
                 <p className="text-xs text-muted/40">{s.desc}</p>

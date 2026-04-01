@@ -41,6 +41,7 @@ body {
   font-size: 15px;
   line-height: 1.65;
   letter-spacing: -0.005em;
+  cursor: default;
 }
 
 html { scroll-behavior: smooth; }
@@ -51,28 +52,106 @@ h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
 h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
 h3 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
 
-/* Labels */
 .label { font-family: "DM Sans", system-ui, sans-serif; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); opacity: 0.5; }
-
-/* Body variants */
 .body-lg { font-size: 1.0625rem; line-height: 1.7; }
 .body-sm { font-size: 0.8125rem; line-height: 1.6; }
 .body-xs { font-size: 0.6875rem; line-height: 1.5; }
-
-/* Buttons */
 button, a { font-family: "DM Sans", system-ui, sans-serif; }
-
-/* Serif for quotes and emphasis */
 blockquote, .serif { font-family: "DM Serif Display", Georgia, serif; }
-
-/* Cards */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; }
 
-/* Animations */
+/* ============================================
+   CURSOR STYLES
+   ============================================ */
+a, button, [role="button"] { cursor: pointer; }
+a:hover, button:hover { cursor: pointer; }
+
+/* ============================================
+   GLOBAL TRANSITIONS — everything animates
+   ============================================ */
+a, button, input, textarea, select, [role="button"] {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================
+   LINK HOVER EFFECTS
+   ============================================ */
+a:not([class*="rounded"]):hover {
+  opacity: 0.85;
+}
+
+/* ============================================
+   BUTTON PRESS EFFECTS
+   ============================================ */
+button:active:not(:disabled), a:active:not(:disabled) {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* ============================================
+   CARD HOVER — subtle lift + glow
+   ============================================ */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* ============================================
+   SCROLL-TRIGGERED ANIMATIONS
+   ============================================ */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes blur-in {
+  from { opacity: 0; filter: blur(8px); }
+  to { opacity: 1; filter: blur(0px); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(232, 93, 58, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(232, 93, 58, 0.25); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes line-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Orb animations */
 @keyframes pulse-neutral {
   0%, 100% { transform: scale(1); filter: brightness(1); }
   50% { transform: scale(1.03); filter: brightness(1.06); }
@@ -90,7 +169,77 @@ blockquote, .serif { font-family: "DM Serif Display", Georgia, serif; }
   50% { transform: scale(1.12); opacity: 0.25; }
 }
 
-.animate-in { animation: fade-in 0.45s ease-out forwards; }
-.animate-in-d1 { animation: fade-in 0.45s ease-out 0.08s forwards; opacity: 0; }
-.animate-in-d2 { animation: fade-in 0.45s ease-out 0.16s forwards; opacity: 0; }
-.animate-in-d3 { animation: fade-in 0.45s ease-out 0.24s forwards; opacity: 0; }
+/* ============================================
+   ANIMATION UTILITY CLASSES
+   ============================================ */
+.animate-in { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.animate-in-d1 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards; opacity: 0; }
+.animate-in-d2 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; opacity: 0; }
+.animate-in-d3 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards; opacity: 0; }
+.animate-in-d4 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; opacity: 0; }
+.animate-in-d5 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards; opacity: 0; }
+
+.animate-scale { animation: fade-in-scale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.animate-blur { animation: blur-in 0.7s ease-out forwards; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-glow { animation: glow-pulse 2.5s ease-in-out infinite; }
+.animate-rotate { animation: rotate-slow 20s linear infinite; }
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ============================================
+   PAGE TRANSITION
+   ============================================ */
+.page-enter {
+  animation: fade-in-scale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ============================================
+   STAGGER CHILDREN (add to parent)
+   ============================================ */
+.stagger > * { opacity: 0; animation: fade-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger > *:nth-child(5) { animation-delay: 0.2s; }
+.stagger > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger > *:nth-child(8) { animation-delay: 0.32s; }
+.stagger > *:nth-child(9) { animation-delay: 0.36s; }
+.stagger > *:nth-child(10) { animation-delay: 0.4s; }
+
+/* ============================================
+   INTERACTIVE FOCUS STATES
+   ============================================ */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: rgba(232, 93, 58, 0.3);
+  box-shadow: 0 0 0 3px rgba(232, 93, 58, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ============================================
+   SELECTION COLOR
+   ============================================ */
+::selection { background: rgba(232, 93, 58, 0.2); color: var(--foreground); }
+
+/* ============================================
+   SCROLLBAR (webkit)
+   ============================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.06); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* ============================================
+   TOOLTIP-STYLE HOVER INFO
+   ============================================ */
+.hover-glow:hover { box-shadow: 0 0 24px rgba(255, 136, 151, 0.12); }
+.hover-lift:hover { transform: translateY(-3px); }
+.hover-brighten:hover { filter: brightness(1.08); }
