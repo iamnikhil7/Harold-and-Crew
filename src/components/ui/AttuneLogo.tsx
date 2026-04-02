@@ -8,7 +8,7 @@ export default function AttuneLogo({ size = 24, className = "" }: { size?: numbe
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="18" />
+      <circle cx="50" cy="50" r="35" stroke="currentColor" strokeWidth="24" />
     </svg>
   );
 }
