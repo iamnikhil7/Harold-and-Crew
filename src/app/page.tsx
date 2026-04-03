@@ -27,7 +27,7 @@ const team = [
     bio: "Passionate about building technology that meets people where they are, not where they should be.",
     initials: "NK",
     color: "#E85D3A",
-    photo: "/team/nikhil.jpg",
+    photo: "/Nikhil.jpg",
   },
   {
     name: "Andy Igwe",
@@ -35,7 +35,7 @@ const team = [
     bio: "Focused on creating experiences that feel human-first, not tech-first.",
     initials: "AI",
     color: "#FF8897",
-    photo: "/team/andy.jpg",
+    photo: "/Andy.png",
   },
   {
     name: "Mariana Alonso",
@@ -43,7 +43,7 @@ const team = [
     bio: "Bridging the gap between behavioral psychology and everyday digital experiences.",
     initials: "MA",
     color: "#9DB0FF",
-    photo: "/team/mariana.jpg",
+    photo: "/Mariana.png",
   },
   {
     name: "Neel Pendse",
@@ -51,7 +51,7 @@ const team = [
     bio: "Driven by the belief that great engineering can make complex things feel effortless.",
     initials: "NP",
     color: "#7ED8A6",
-    photo: "/team/neel.jpg",
+    photo: "/Neel.png",
   },
 ];
 
