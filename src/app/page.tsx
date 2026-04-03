@@ -22,14 +22,6 @@ const steps = [
 
 const team = [
   {
-    name: "Nikhil Khanal",
-    role: "Founder & Developer",
-    bio: "Passionate about building technology that meets people where they are, not where they should be.",
-    initials: "NK",
-    color: "#E85D3A",
-    photo: "/Nikhil.jpg",
-  },
-  {
     name: "Andy Igwe",
     role: "Founder & Researcher",
     bio: "Focused on creating experiences that feel human-first, not tech-first.",
@@ -52,6 +44,14 @@ const team = [
     initials: "NP",
     color: "#7ED8A6",
     photo: "/Neel.png",
+  },
+  {
+    name: "Nikhil Khanal",
+    role: "Founder, Designer & Developer",
+    bio: "Passionate about building technology that meets people where they are, not where they should be.",
+    initials: "NK",
+    color: "#E85D3A",
+    photo: "/Nikhil.jpg",
   },
 ];
 
