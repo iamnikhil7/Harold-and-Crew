@@ -15,7 +15,7 @@ const activities: Record<string, { name: string; type: string; typeIcon: string;
 };
 
 const participants = [
-  { initials: "JK", color: "#FF8897" },
+  { initials: "JK", color: "#8B5CF6" },
   { initials: "SM", color: "#9DB0FF" },
   { initials: "AL", color: "#7ED8A6" },
   { initials: "RT", color: "#E85D3A" },
@@ -37,7 +37,7 @@ export default function ActivityDetailPage() {
   }, [activity?.name, slug, router]);
 
   if (!activity) {
-    return (<><Navbar /><main className="min-h-screen bg-background text-foreground pt-24 px-6"><div className="max-w-2xl mx-auto space-y-6"><h1 className="font-serif text-2xl">Activity not found</h1><p className="text-muted/60">We couldn&apos;t find the activity you&apos;re looking for.</p><Link href="/hub" className="inline-block text-sm text-[#FF8897] hover:underline">&larr; Back to Hub</Link></div></main></>);
+    return (<><Navbar /><main className="min-h-screen bg-background text-foreground pt-24 px-6"><div className="max-w-2xl mx-auto space-y-6"><h1 className="font-serif text-2xl">Activity not found</h1><p className="text-muted/60">We couldn&apos;t find the activity you&apos;re looking for.</p><Link href="/hub" className="inline-block text-sm text-accent hover:underline">&larr; Back to Hub</Link></div></main></>);
   }
 
   const logisticsRows = [
@@ -64,7 +64,7 @@ export default function ActivityDetailPage() {
             </motion.div>
             <section className="space-y-4">
               <div className="flex items-center gap-3"><Image src="/harold-mascot.png" alt="Harold" width={32} height={32} className="rounded-full" /><h2 className="font-serif text-xl">Why this might fit right now</h2></div>
-              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}><p className="text-muted leading-relaxed border-l-2 border-[#FF8897]/30 pl-4">{activity.haroldNote}</p></motion.div>
+              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}><p className="text-muted leading-relaxed border-l-2 border-[#8B5CF6]/30 pl-4">{activity.haroldNote}</p></motion.div>
             </section>
             <section className="space-y-3">
               <p className="text-xs uppercase text-muted/50">Recent participants</p>
@@ -75,7 +75,7 @@ export default function ActivityDetailPage() {
             </section>
             <section className="space-y-2"><p className="text-foreground">{activity.participation}</p><p className="text-sm text-muted/60">{activity.communityNote}</p></section>
             <section className="flex items-center gap-4 pt-2">
-              <motion.button onClick={handleInterested} className="bg-[#FF8897] text-black font-medium rounded-full px-7 py-3" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400 }}>I&apos;m interested</motion.button>
+              <motion.button onClick={handleInterested} className="bg-accent text-black font-medium rounded-full px-7 py-3" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400 }}>I&apos;m interested</motion.button>
               <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 400 }}><Link href="/hub" className="text-muted/60 hover:text-foreground transition-colors px-4 py-3">Not right now</Link></motion.div>
             </section>
           </div>
