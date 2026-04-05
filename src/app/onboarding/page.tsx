@@ -1,169 +1,195 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { questions } from "@/lib/questions";
-import { calculateArchetypeScores, generateGoalSuggestions } from "@/lib/scoring";
-import QuestionCard from "@/components/QuestionCard";
+import Navbar from "@/components/layout/Navbar";
+import HaroldOrb from "@/components/HaroldOrb";
 
-type Step = "sensitivity" | "questionnaire" | "goals" | "why";
+const activityOptions = [
+  "Running/Walking",
+  "Yoga/Stretching",
+  "Recreational Sports",
+  "Group Fitness",
+  "Community Events",
+  "Open to Anything",
+];
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const [step, setStep] = useState<Step>("sensitivity");
-  const [sensitivityMode, setSensitivityMode] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [responses, setResponses] = useState<Record<number, string | string[] | number>>({});
-  const [suggestedGoals, setSuggestedGoals] = useState<string[]>([]);
-  const [activeGoals, setActiveGoals] = useState<boolean[]>([]);
-  const [personalWhy, setPersonalWhy] = useState("");
-  const [loading, setLoading] = useState(false);
-  // Store results in memory for now (no Supabase)
-  const [archetypeResult, setArchetypeResult] = useState<{ primaryArchetypeId: number } | null>(null);
+  const [step, setStep] = useState(1);
+  const [location, setLocation] = useState("");
+  const [activityPreferences, setActivityPreferences] = useState<string[]>([]);
+  const [healthConnection, setHealthConnection] = useState<string | null>(null);
 
-  const handleSensitivityChoice = (sensitive: boolean) => {
-    setSensitivityMode(sensitive);
-    setStep("questionnaire");
-  };
-
-  const handleResponse = (value: string | string[] | number) => {
-    setResponses((prev) => ({ ...prev, [questions[currentQuestion].id]: value }));
-  };
-
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion((p) => p + 1);
-      return;
-    }
-
-    // All questions answered
-    setLoading(true);
-    const formatted = Object.entries(responses).map(([qid, value]) => {
-      const q = questions.find((q) => q.id === Number(qid))!;
-      return {
-        questionId: Number(qid),
-        responseType: q.type,
-        responseText: undefined,
-        responseChoice: value,
-      };
-    });
-
-    const result = calculateArchetypeScores(formatted);
-    setArchetypeResult(result);
-    const goals = generateGoalSuggestions(result.primaryArchetypeId, formatted);
-    setSuggestedGoals(goals);
-    setActiveGoals(goals.map(() => true));
-    setLoading(false);
-    setStep("goals");
-  };
-
-  const handleGoalsComplete = () => {
-    setStep("why");
-  };
-
-  const handleWhyComplete = () => {
-    // Store in localStorage for the archetype page to read
-    localStorage.setItem("pause_archetype_id", String(archetypeResult?.primaryArchetypeId || 1));
-    localStorage.setItem("pause_goals", JSON.stringify(suggestedGoals.filter((_, i) => activeGoals[i])));
-    localStorage.setItem("pause_why", personalWhy.trim());
-    localStorage.setItem("pause_sensitivity", String(sensitivityMode));
-    router.push("/archetype");
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin mb-4" />
-        <p className="text-muted text-sm">Finding your archetype...</p>
-      </div>
+  const toggleActivity = (activity: string) => {
+    setActivityPreferences((prev) =>
+      prev.includes(activity)
+        ? prev.filter((a) => a !== activity)
+        : [...prev, activity]
     );
-  }
+  };
 
-  if (step === "sensitivity") return (
-    <div className="min-h-screen flex items-center justify-center px-6 bg-background">
-      <div className="max-w-md w-full animate-in">
-        <p className="text-xs text-muted/40 mb-8">Before we begin</p>
-        <p className="text-lg leading-relaxed mb-8">
-          Some of what we explore touches on food, body image, and health habits.
-          If any of these feel sensitive for you right now, that&apos;s completely okay.
-        </p>
-        <p className="text-sm text-muted mb-6">Do any of these feel difficult right now?</p>
-        <div className="space-y-2">
-          <button onClick={() => handleSensitivityChoice(false)} className="w-full text-left px-4 py-3.5 rounded-lg border border-white/5 text-sm hover:border-white/10 hover:text-foreground text-muted transition-colors">
-            No, I&apos;m good to continue
-          </button>
-          <button onClick={() => handleSensitivityChoice(true)} className="w-full text-left px-4 py-3.5 rounded-lg border border-white/5 text-sm hover:border-white/10 hover:text-foreground text-muted transition-colors">
-            Yes, some of these feel sensitive
-          </button>
-        </div>
-        <p className="text-xs text-muted/20 mt-6">Either way, we&apos;ll adapt to you.</p>
-      </div>
-    </div>
-  );
+  const saveAndAdvance = (nextStep: number) => {
+    localStorage.setItem(
+      "harold_onboarding",
+      JSON.stringify({ location, activityPreferences, healthConnection })
+    );
+    setStep(nextStep);
+  };
 
-  if (step === "questionnaire") return (
-    <div className="min-h-screen flex items-center justify-center py-12 bg-background">
-      <QuestionCard
-        question={questions[currentQuestion]}
-        sensitivityMode={sensitivityMode}
-        value={responses[questions[currentQuestion].id] ?? null}
-        onChange={handleResponse}
-        onNext={handleNext}
-        onBack={() => setCurrentQuestion((p) => p - 1)}
-        isFirst={currentQuestion === 0}
-        isLast={currentQuestion === questions.length - 1}
-        currentIndex={currentQuestion}
-        totalQuestions={questions.length}
-      />
-    </div>
-  );
+  const handleHealthChoice = (choice: string) => {
+    setHealthConnection(choice);
+    localStorage.setItem(
+      "harold_onboarding",
+      JSON.stringify({
+        location,
+        activityPreferences,
+        healthConnection: choice,
+      })
+    );
+    setStep(4);
+  };
 
-  if (step === "goals") return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-6 bg-background">
-      <div className="max-w-2xl w-full animate-in">
-        <p className="text-xs text-accent uppercase tracking-wider mb-3">Part 3</p>
-        <h2 className="text-2xl font-bold mb-2">Here&apos;s what we think matters for you</h2>
-        <p className="text-sm text-muted mb-8">These aren&apos;t metrics. They&apos;re identity anchors. Remove any that don&apos;t feel right.</p>
-        <div className="space-y-2 mb-8">
-          {suggestedGoals.map((goal, i) => (
-            <div key={i} className={`flex items-start gap-3 p-4 rounded-lg border transition-all ${activeGoals[i] ? "bg-accent/5 border-accent/15" : "bg-surface border-white/5 opacity-40"}`}>
-              <button onClick={() => setActiveGoals((p) => { const n = [...p]; n[i] = !n[i]; return n; })} className={`mt-0.5 w-5 h-5 rounded border-2 flex-shrink-0 flex items-center justify-center text-xs transition-colors ${activeGoals[i] ? "bg-accent border-accent text-background" : "border-white/20"}`}>
-                {activeGoals[i] ? "\u2713" : ""}
-              </button>
-              <p className={`text-sm leading-relaxed ${activeGoals[i] ? "text-foreground" : "text-muted"}`}>{goal}</p>
+  return (
+    <div className="min-h-screen bg-[#0B0B0B] text-[#F5F5F0]">
+      <Navbar />
+
+      {/* Step 1: Welcome */}
+      {step === 1 && (
+        <div className="min-h-screen flex items-center justify-center px-6">
+          <div className="max-w-md w-full text-center animate-in">
+            <div className="flex justify-center mb-8 animate-in-d1">
+              <HaroldOrb state="neutral" size={100} />
             </div>
-          ))}
+            <h1 className="font-serif text-3xl mb-4 animate-in-d2">
+              Hi. I&apos;m Harold.
+            </h1>
+            <p className="text-[#F5F5F0]/60 leading-relaxed mb-10 animate-in-d3">
+              I&apos;m here to help you notice patterns you might otherwise
+              miss—and connect you to experiences that help restore rhythm to
+              your life.
+            </p>
+            <button
+              onClick={() => setStep(2)}
+              className="px-8 py-3 rounded-lg text-sm font-medium bg-[#FF8897] text-[#0B0B0B] hover:opacity-90 transition-opacity animate-in-d4"
+            >
+              Let&apos;s start
+            </button>
+          </div>
         </div>
-        <button onClick={handleGoalsComplete} disabled={!activeGoals.some(Boolean)} className={`w-full py-3 rounded-lg text-sm font-medium transition-all ${activeGoals.some(Boolean) ? "bg-accent text-background hover:bg-accent-soft" : "bg-surface-light text-muted/40 cursor-not-allowed"}`}>
-          Continue
-        </button>
-      </div>
+      )}
+
+      {/* Step 2: Location & Activity Preferences */}
+      {step === 2 && (
+        <div className="min-h-screen flex items-center justify-center px-6 pt-20 pb-12">
+          <div className="max-w-lg w-full animate-in">
+            <h2 className="font-serif text-2xl mb-6">Where are you?</h2>
+
+            <div className="mb-2">
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="City or neighborhood"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F5F5F0] placeholder:text-[#F5F5F0]/25 focus:outline-none focus:border-[#FF8897]/40 transition-colors"
+              />
+            </div>
+            <p className="text-xs text-[#F5F5F0]/40 mb-1">
+              This helps me find group activities near you.
+            </p>
+            <p className="text-xs text-[#F5F5F0]/25 mb-10">
+              Your location stays private—it&apos;s only used for activity
+              suggestions.
+            </p>
+
+            <h3 className="font-serif text-lg mb-4 animate-in-d1">
+              What sounds appealing?
+            </h3>
+            <div className="grid grid-cols-2 gap-2 mb-8">
+              {activityOptions.map((activity) => {
+                const selected = activityPreferences.includes(activity);
+                return (
+                  <button
+                    key={activity}
+                    onClick={() => toggleActivity(activity)}
+                    className={`px-4 py-3 rounded-lg text-sm text-left transition-all border ${
+                      selected
+                        ? "bg-[#FF8897]/10 border-[#FF8897]/40 text-[#F5F5F0]"
+                        : "bg-white/[0.03] border-white/[0.06] text-[#F5F5F0]/60 hover:border-white/10 hover:text-[#F5F5F0]/80"
+                    }`}
+                  >
+                    {activity}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => saveAndAdvance(3)}
+              className="w-full py-3 rounded-lg text-sm font-medium bg-[#FF8897] text-[#0B0B0B] hover:opacity-90 transition-opacity"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Health Data Connection */}
+      {step === 3 && (
+        <div className="min-h-screen flex items-center justify-center px-6 pt-20 pb-12">
+          <div className="max-w-lg w-full animate-in">
+            <h2 className="font-serif text-2xl mb-3">
+              Want me to observe patterns?
+            </h2>
+            <p className="text-[#F5F5F0]/60 leading-relaxed mb-8 text-sm">
+              I can look at your health data—sleep, recovery, activity—and help
+              you understand what it means. Or we can skip this for now.
+            </p>
+
+            <div className="space-y-2 mb-6">
+              {[
+                { id: "apple_health", label: "Connect Apple Health" },
+                { id: "wearable", label: "Connect Wearable" },
+                { id: "skip", label: "Skip for now" },
+              ].map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => handleHealthChoice(option.id)}
+                  className="w-full text-left px-4 py-4 rounded-lg border border-white/[0.06] bg-white/[0.03] text-sm text-[#F5F5F0]/80 hover:border-white/10 hover:text-[#F5F5F0] transition-all"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-[#F5F5F0]/25">
+              Your data never leaves your device or my interpretations. I
+              don&apos;t store raw metrics.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Step 4: First Harold Reflection */}
+      {step === 4 && (
+        <div className="min-h-screen flex items-center justify-center px-6">
+          <div className="max-w-md w-full text-center animate-in">
+            <div className="flex justify-center mb-8 animate-in-d1">
+              <HaroldOrb state="neutral" size={120} />
+            </div>
+            <p className="text-[#F5F5F0]/70 leading-relaxed mb-10 text-lg animate-in-d2">
+              I&apos;ll be here when you need me—not every day, just when
+              there&apos;s something worth noticing.
+            </p>
+            <button
+              onClick={() => router.push("/hub")}
+              className="px-8 py-3 rounded-lg text-sm font-medium bg-[#FF8897] text-[#0B0B0B] hover:opacity-90 transition-opacity animate-in-d3"
+            >
+              Show me the Hub
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-
-  if (step === "why") return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-6 bg-background">
-      <div className="max-w-2xl w-full animate-in">
-        <p className="text-xs text-muted/40 mb-6">Last step</p>
-        <h2 className="text-2xl font-bold mb-2">Now write your why.</h2>
-        <p className="text-sm text-muted mb-6">
-          At 11pm, when you&apos;re reaching for the thing you said you wouldn&apos;t — these words will appear. Make them count.
-        </p>
-        <textarea
-          value={personalWhy}
-          onChange={(e) => setPersonalWhy(e.target.value)}
-          placeholder="I want to feel like myself again..."
-          rows={4}
-          className="w-full bg-surface border border-white/10 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted/30 focus:outline-none focus:border-accent/30 resize-none transition-colors mb-2"
-        />
-        <p className="text-xs text-muted mb-6">
-          {personalWhy.trim().length < 15 ? `${15 - personalWhy.trim().length} more characters` : "\u2713 Ready"}
-        </p>
-        <button onClick={handleWhyComplete} disabled={personalWhy.trim().length < 15} className={`w-full py-3 rounded-lg text-sm font-medium transition-all ${personalWhy.trim().length >= 15 ? "bg-accent text-background hover:bg-accent-soft" : "bg-surface-light text-muted/40 cursor-not-allowed"}`}>
-          Reveal my archetype
-        </button>
-      </div>
-    </div>
-  );
-
-  return null;
 }

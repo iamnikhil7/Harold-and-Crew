@@ -3,8 +3,8 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
-  title: "Attune — Health Awareness That Fits Your Life",
-  description: "Attune transforms your health data into moments of awareness — delivered when you're actually ready to notice.",
+  title: "Harold & Crew — Regain Your Rhythm",
+  description: "A companion who helps you understand your patterns, connect with your community, and restore balance to your life.",
   icons: {
     icon: "/Attune_Logo_White_png.png",
   },

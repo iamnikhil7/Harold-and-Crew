@@ -2,16 +2,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import AttuneLogo from "@/components/ui/AttuneLogo";
 
 const navLinks = [
-  { href: "/#about", label: "About Us", isSection: true },
-  { href: "/#features", label: "Features", isSection: true },
+  { href: "/#about", label: "About", isSection: true },
   { href: "/#how-it-works", label: "How It Works", isSection: true },
-  { href: "/#team", label: "Team", isSection: true },
-  { href: "/harold", label: "Harold", isSection: false },
-  { href: "/crew", label: "Crew", isSection: false },
-  { href: "/pause", label: "Pause (Soon)", isSection: false },
+  { href: "/onboarding", label: "Get Started", isSection: false },
 ];
 
 export default function Navbar() {
@@ -28,9 +23,8 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/90 backdrop-blur-xl border-b border-white/5 py-0" : "bg-transparent py-1"}`}>
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity duration-200">
-          <AttuneLogo size={22} />
-          <span className="text-lg font-medium tracking-tight">Attune</span>
+        <Link href="/" className="text-foreground hover:opacity-80 transition-opacity duration-200">
+          <span className="text-xl font-serif tracking-tight">Harold &amp; Crew</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
