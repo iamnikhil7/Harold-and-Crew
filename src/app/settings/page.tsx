@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
+import { motion, AnimatePresence } from "framer-motion";
 
 const activityOptions = [
   "Running/Walking",
@@ -36,6 +37,7 @@ const defaultSettings: SettingsData = {
 export default function SettingsPage() {
   const [settings, setSettings] = useState<SettingsData>(defaultSettings);
   const [loaded, setLoaded] = useState(false);
+  const [showSaved, setShowSaved] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("harold_onboarding");
@@ -58,10 +60,19 @@ export default function SettingsPage() {
     setLoaded(true);
   }, []);
 
-  const persist = (next: SettingsData) => {
-    setSettings(next);
-    localStorage.setItem("harold_onboarding", JSON.stringify(next));
-  };
+  const flashSaved = useCallback(() => {
+    setShowSaved(true);
+    setTimeout(() => setShowSaved(false), 1500);
+  }, []);
+
+  const persist = useCallback(
+    (next: SettingsData) => {
+      setSettings(next);
+      localStorage.setItem("harold_onboarding", JSON.stringify(next));
+      flashSaved();
+    },
+    [flashSaved]
+  );
 
   const toggleActivity = (activity: string) => {
     const updated = settings.activityPreferences.includes(activity)
@@ -100,21 +111,60 @@ export default function SettingsPage() {
   if (!loaded) return null;
 
   return (
-    <div className="min-h-screen bg-[#0B0B0B] text-[#F5F5F0]">
+    <motion.div
+      className="min-h-screen bg-[#0B0B0B] text-[#F5F5F0]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <Navbar />
 
-      <div className="max-w-2xl mx-auto px-6 pt-24 pb-16">
-        <Link
-          href="/hub"
-          className="text-sm text-[#F5F5F0]/50 hover:text-[#F5F5F0]/80 transition-colors mb-6 inline-block"
-        >
-          &larr; Back to Hub
-        </Link>
+      {/* Saved toast */}
+      <AnimatePresence>
+        {showSaved && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#FF8897]/15 border border-[#FF8897]/40 text-[#FF8897] text-sm px-4 py-2 rounded-lg backdrop-blur-sm"
+          >
+            Saved
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <h1 className="font-serif text-3xl mb-8">Settings</h1>
+      <div className="max-w-2xl mx-auto px-6 pt-24 pb-16">
+        <motion.div
+          whileHover={{ x: -4 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="inline-block mb-6"
+        >
+          <Link
+            href="/hub"
+            className="text-sm text-[#F5F5F0]/50 hover:text-[#F5F5F0]/80 transition-colors"
+          >
+            &larr; Back to Hub
+          </Link>
+        </motion.div>
+
+        <motion.h1
+          className="font-serif text-3xl mb-8"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          Settings
+        </motion.h1>
 
         {/* Activity Preferences */}
-        <div className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4">
+        <motion.div
+          className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
           <h2 className="font-serif text-lg mb-4">Activity Preferences</h2>
 
           <p className="text-sm text-[#F5F5F0]/50 mb-3">Activity types</p>
@@ -122,9 +172,12 @@ export default function SettingsPage() {
             {activityOptions.map((activity) => {
               const selected = settings.activityPreferences.includes(activity);
               return (
-                <button
+                <motion.button
                   key={activity}
                   onClick={() => toggleActivity(activity)}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   className={`px-4 py-3 rounded-lg text-sm text-left transition-all border ${
                     selected
                       ? "bg-[#FF8897]/10 border-[#FF8897]/40 text-[#F5F5F0]"
@@ -132,7 +185,7 @@ export default function SettingsPage() {
                   }`}
                 >
                   {activity}
-                </button>
+                </motion.button>
               );
             })}
           </div>
@@ -142,9 +195,12 @@ export default function SettingsPage() {
             {timingOptions.map((timing) => {
               const selected = settings.preferredTiming === timing;
               return (
-                <button
+                <motion.button
                   key={timing}
                   onClick={() => setTiming(timing)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   className={`px-4 py-2.5 rounded-lg text-sm transition-all border flex-1 ${
                     selected
                       ? "bg-[#FF8897]/10 border-[#FF8897]/40 text-[#F5F5F0]"
@@ -152,7 +208,7 @@ export default function SettingsPage() {
                   }`}
                 >
                   {timing}
-                </button>
+                </motion.button>
               );
             })}
           </div>
@@ -165,10 +221,16 @@ export default function SettingsPage() {
             placeholder="City or neighborhood"
             className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F5F5F0] placeholder:text-[#F5F5F0]/25 focus:outline-none focus:border-[#FF8897]/40 transition-colors"
           />
-        </div>
+        </motion.div>
 
         {/* Health Data */}
-        <div className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4">
+        <motion.div
+          className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
           <h2 className="font-serif text-lg mb-4">Health Data</h2>
 
           <div className="flex items-center justify-between mb-4">
@@ -184,8 +246,11 @@ export default function SettingsPage() {
                 {isHealthConnected ? "Connected" : "Not connected"}
               </span>
             </div>
-            <button
+            <motion.button
               onClick={toggleHealthConnection}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className={`text-sm px-4 py-2 rounded-lg border transition-all ${
                 isHealthConnected
                   ? "border-white/10 text-[#F5F5F0]/60 hover:border-white/20 hover:text-[#F5F5F0]/80"
@@ -193,17 +258,23 @@ export default function SettingsPage() {
               }`}
             >
               {isHealthConnected ? "Disconnect" : "Connect"}
-            </button>
+            </motion.button>
           </div>
 
           <p className="text-xs text-[#F5F5F0]/30 leading-relaxed">
             Your data never leaves your device. Harold only sees patterns, never
             raw metrics.
           </p>
-        </div>
+        </motion.div>
 
         {/* Notifications */}
-        <div className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4">
+        <motion.div
+          className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
           <h2 className="font-serif text-lg mb-4">Notifications</h2>
 
           <div className="space-y-4">
@@ -221,10 +292,13 @@ export default function SettingsPage() {
                 role="switch"
                 aria-checked={settings.notifyReflections}
               >
-                <span
-                  className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
-                    settings.notifyReflections ? "translate-x-5" : "translate-x-0"
-                  }`}
+                <motion.div
+                  className="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"
+                  layout
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  style={{
+                    x: settings.notifyReflections ? 20 : 0,
+                  }}
                 />
               </button>
             </div>
@@ -243,18 +317,27 @@ export default function SettingsPage() {
                 role="switch"
                 aria-checked={settings.notifyReminders}
               >
-                <span
-                  className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
-                    settings.notifyReminders ? "translate-x-5" : "translate-x-0"
-                  }`}
+                <motion.div
+                  className="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"
+                  layout
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  style={{
+                    x: settings.notifyReminders ? 20 : 0,
+                  }}
                 />
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Account */}
-        <div className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4">
+        <motion.div
+          className="p-6 rounded-2xl bg-[#141414] border border-[#272727] mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
           <h2 className="font-serif text-lg mb-4">Account</h2>
 
           <div className="mb-4">
@@ -270,8 +353,8 @@ export default function SettingsPage() {
               Terms of Service
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
