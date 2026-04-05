@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
@@ -36,6 +37,7 @@ const staggerItem = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0
 const statPillVariants = { hidden: { opacity: 0, scale: 0.85 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: "easeOut" as const } } };
 
 export default function HubPage() {
+  const router = useRouter();
   const [greeting, setGreeting] = useState("Good evening");
   const [insight, setInsight] = useState<Insight | null>(null);
   const [insightExpanded, setInsightExpanded] = useState(false);
@@ -47,7 +49,19 @@ export default function HubPage() {
     setInsight(insights[Math.floor(Math.random() * insights.length)]);
     try { const hc = localStorage.getItem("health_connected"); if (hc === "true") setHealthConnected(true); } catch {}
     try { const raw = localStorage.getItem("harold_profile"); if (raw) { const p = JSON.parse(raw); if (p?.archetype) setArchetype(p.archetype); } } catch {}
-  }, []);
+
+    // Check for pending post-activity reflection
+    try {
+      const lastActivity = localStorage.getItem("harold_last_activity");
+      if (lastActivity) {
+        const parsed = JSON.parse(lastActivity);
+        const hoursSince = (Date.now() - new Date(parsed.attendedAt).getTime()) / 3600000;
+        if (hoursSince <= 48 && !parsed.reflectionShown) {
+          router.push("/reflection");
+        }
+      }
+    } catch {}
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-background text-foreground"><Navbar />
