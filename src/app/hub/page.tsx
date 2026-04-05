@@ -98,12 +98,6 @@ export default function HubPage() {
           </AnimatePresence>
         </motion.div>)}
 
-        {/* Daily Check-in CTA */}
-        <motion.div className="p-4 rounded-2xl bg-gradient-subtle border border-accent/10 flex flex-col sm:flex-row items-start sm:items-center gap-3" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
-          <div className="flex-1"><p className="text-sm font-medium mb-0.5">Daily Check-in</p><p className="text-xs text-muted/60">Tell Harold how you&apos;re feeling today</p></div>
-          <Link href="/check-in" className="inline-block px-5 py-2 rounded-xl bg-gradient-primary text-white text-sm font-medium hover:opacity-90 transition-opacity shrink-0">Check in</Link>
-        </motion.div>
-
         {!healthConnected && (<motion.div className="p-4 rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06] flex flex-col sm:flex-row items-start sm:items-center gap-3" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }}>
           <p className="text-sm text-muted flex-1">Connect your health data to unlock deeper insights</p>
           <Link href="/health-connect" className="inline-block px-4 py-2 rounded-full bg-accent/15 text-accent text-sm font-medium hover:bg-accent/25 transition-colors shrink-0">Connect Apple Health</Link>
