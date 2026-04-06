@@ -215,7 +215,7 @@ export default function ReflectionPage() {
               </div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex flex-col items-center gap-3 pt-4">
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={handleAcknowledge} className="px-8 py-3 rounded-xl text-sm font-semibold bg-gradient-primary text-white shadow-lg shadow-accent/20">Thanks, Harold</motion.button>
-                <button onClick={() => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); router.push("/hub"); }} className="text-xs text-foreground/30 hover:text-foreground/50 transition-colors">Skip to Hub</button>
+                <button onClick={() => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); router.push("/hub"); }} className="text-xs text-foreground/30 hover:text-foreground/50 transition-colors">Skip to Harold</button>
               </motion.div>
             </motion.div>
           )}
