@@ -144,7 +144,7 @@ export default function SettingsPage() {
             href="/hub"
             className="text-sm text-foreground/50 hover:text-foreground/80 transition-colors"
           >
-            &larr; Back to Hub
+            &larr; Back to Harold
           </Link>
         </motion.div>
 
