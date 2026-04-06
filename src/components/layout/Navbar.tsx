@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { href: "/#about", label: "About", isSection: true },
   { href: "/#how-it-works", label: "How It Works", isSection: true },
-  { href: "/hub", label: "Hub", isSection: false },
+  { href: "/hub", label: "Harold", isSection: false },
 ];
 
 export default function Navbar() {
