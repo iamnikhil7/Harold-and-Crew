@@ -572,17 +572,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 8. FOOTER ──────────────────────────────────────────────── */}
-      <footer className="border-t border-white/[0.04] py-10 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="font-serif text-sm font-medium">
-              Harold &amp; Crew
-            </span>
-            <span className="text-xs text-muted/25">Regain your rhythm</span>
-            <span className="text-xs text-muted/25">
-              &copy; {currentYear} Harold &amp; Crew. All rights reserved.
-            </span>
+      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      <footer className="border-t border-border py-12 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-4 gap-8 mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Image src="/harold-mascot.png" alt="Harold" width={24} height={24} className="rounded-lg" />
+                <span className="text-sm font-bold">Harold &amp; Crew</span>
+              </div>
+              <p className="text-xs text-muted/40 leading-relaxed">A companion for regaining rhythm. Observe, reflect, connect.</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Product</p>
+              <div className="space-y-2">
+                <Link href="/onboarding" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Get Started</Link>
+                <Link href="/hub" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Harold</Link>
+                <Link href="/check-in" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Check-in</Link>
+                <Link href="/pricing" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Pricing</Link>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Learn</p>
+              <div className="space-y-2">
+                <Link href="/#about" className="block text-sm text-muted/60 hover:text-foreground transition-colors">About</Link>
+                <Link href="/#how-it-works" className="block text-sm text-muted/60 hover:text-foreground transition-colors">How It Works</Link>
+                <Link href="/#team" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Team</Link>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Community</p>
+              <div className="space-y-2">
+                <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="block text-sm text-accent/70 hover:text-accent transition-colors font-medium">Join our Discord</a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Instagram</a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Twitter / X</a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">LinkedIn</a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">TikTok</a>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border">
+            <span className="text-xs text-muted/30">&copy; {currentYear} Harold &amp; Crew. All rights reserved.</span>
+            <span className="text-xs text-muted/20">v1.0.0</span>
           </div>
         </div>
       </footer>
