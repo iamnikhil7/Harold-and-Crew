@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   description: "A companion who helps you understand your patterns, connect with your community, and restore balance to your life.",
   icons: {
     icon: "/Attune_Logo_White_png.png",
+    apple: "/Attune_Logo_White_png.png",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
   },
 };
 
