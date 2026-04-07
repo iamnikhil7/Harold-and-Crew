@@ -246,6 +246,17 @@ button:active:not(:disabled), a:active:not(:disabled) { transform: scale(0.98); 
 .stagger > *:nth-child(6) { animation-delay: 0.24s; }
 .page-enter { animation: fade-in-scale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
+/* ── Native mobile (no device chrome) ────────── */
+.mobile-native {
+  width: 100vw;
+  min-height: 100dvh;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--background);
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ── Desktop view overrides ──────────────────── */
 html[data-view="desktop"] body { overflow: auto; }
 html[data-view="desktop"] .min-h-full { min-height: 100vh; }
