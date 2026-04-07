@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
   return (
     <motion.div
-      className="min-h-screen bg-background text-foreground"
+      className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
