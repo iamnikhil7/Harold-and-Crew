@@ -118,7 +118,7 @@ export default function Home() {
   const headlineWords = ["Regain", "your", "rhythm"];
 
   return (
-    <div className="min-h-full bg-background">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* \u2500\u2500 1. HERO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}

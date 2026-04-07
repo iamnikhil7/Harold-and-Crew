@@ -5,27 +5,22 @@ import { createContext, useContext, useState, useCallback, useEffect, type React
 type ViewMode = "mobile" | "desktop";
 
 const ViewModeContext = createContext<{ mode: ViewMode; toggle: () => void }>({
-  mode: "desktop",
+  mode: "mobile",
   toggle: () => {},
 });
 
 export const useViewMode = () => useContext(ViewModeContext);
 
 export default function ViewModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ViewMode>("desktop");
+  const [mode, setMode] = useState<ViewMode>("mobile");
   const [isNativeMobile, setIsNativeMobile] = useState(false);
   const toggle = useCallback(() => setMode((m) => (m === "mobile" ? "desktop" : "mobile")), []);
 
-  // Auto-detect viewport on mount
+  // Auto-detect: on actual mobile devices, go mobile; on desktop screens, go desktop
   useEffect(() => {
-    const checkViewport = () => {
-      const isMobile = window.innerWidth <= 768;
-      setIsNativeMobile(isMobile);
-      setMode(isMobile ? "mobile" : "desktop");
-    };
-    checkViewport();
-    window.addEventListener("resize", checkViewport);
-    return () => window.removeEventListener("resize", checkViewport);
+    const isMobile = window.innerWidth <= 768;
+    setIsNativeMobile(isMobile);
+    setMode(isMobile ? "mobile" : "desktop");
   }, []);
 
   useEffect(() => {
@@ -34,7 +29,7 @@ export default function ViewModeProvider({ children }: { children: ReactNode }) 
 
   return (
     <ViewModeContext.Provider value={{ mode, toggle }}>
-      {/* Toggle button — only show on non-mobile screens */}
+      {/* Toggle button — only on desktop screens */}
       {!isNativeMobile && (
         <button
           onClick={toggle}
@@ -57,21 +52,18 @@ export default function ViewModeProvider({ children }: { children: ReactNode }) 
         </button>
       )}
 
-      {/* Render based on mode */}
-      {mode === "mobile" && !isNativeMobile ? (
-        /* Desktop user previewing mobile — show device frame */
-        <div className="device-frame">
-          <div className="device-screen">{children}</div>
-        </div>
-      ) : mode === "mobile" && isNativeMobile ? (
-        /* Actual mobile device — full screen, no chrome */
+      {/* App shell */}
+      {isNativeMobile ? (
+        /* Actual phone — full screen, no device chrome */
         <div className="mobile-native">
           {children}
         </div>
       ) : (
-        /* Desktop mode — full width website */
-        <div className="desktop-frame">
-          <div className="device-screen">{children}</div>
+        /* Desktop browser — either device frame preview or full website */
+        <div className={mode === "mobile" ? "device-frame" : "desktop-frame"}>
+          <div className="device-screen">
+            {children}
+          </div>
         </div>
       )}
     </ViewModeContext.Provider>

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="h-full flex items-center justify-center bg-[#050507] max-md:block">
+      <body className="h-full flex items-center justify-center bg-[#050507]">
         <ViewModeProvider>{children}</ViewModeProvider>
       </body>
     </html>
