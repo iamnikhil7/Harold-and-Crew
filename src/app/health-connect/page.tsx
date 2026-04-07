@@ -4,25 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 
 const DATA_CATEGORIES = [
-  {
-    emoji: "\u2764\uFE0F",
-    title: "Heart & Recovery",
-    description: "Resting heart rate, HRV, recovery trends",
-  },
-  {
-    emoji: "\uD83D\uDE34",
-    title: "Sleep",
-    description: "Duration, quality, deep sleep percentage, bedtime patterns",
-  },
-  {
-    emoji: "\uD83C\uDFC3",
-    title: "Activity",
-    description: "Steps, active minutes, movement patterns",
-  },
+  { emoji: "\u2764\uFE0F", title: "Heart & Recovery", description: "Resting heart rate, HRV, recovery trends" },
+  { emoji: "\uD83D\uDE34", title: "Sleep", description: "Duration, quality, deep sleep percentage, bedtime patterns" },
+  { emoji: "\uD83C\uDFC3", title: "Activity", description: "Steps, active minutes, movement patterns" },
 ];
 
 const PERMISSIONS = [
@@ -36,11 +23,7 @@ const PERMISSIONS = [
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.12, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  }),
+  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.12, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as const } }),
 };
 
 const stepTransition = {
@@ -64,100 +47,53 @@ export default function HealthConnectPage() {
   };
 
   const handleAllow = () => {
-    const enabledPermissions = Object.entries(permissions)
-      .filter(([, v]) => v)
-      .map(([k]) => k);
-
-    localStorage.setItem(
-      "harold_health",
-      JSON.stringify({
-        connected: true,
-        permissions: enabledPermissions,
-        connectedAt: new Date().toISOString(),
-      })
-    );
-
+    const enabledPermissions = Object.entries(permissions).filter(([, v]) => v).map(([k]) => k);
+    localStorage.setItem("harold_health", JSON.stringify({ connected: true, permissions: enabledPermissions, connectedAt: new Date().toISOString() }));
     setHealthConnected(true);
     setAnalysisProgress(true);
     setStep(3);
   };
 
   const handleDeny = () => {
-    localStorage.setItem(
-      "harold_health",
-      JSON.stringify({
-        connected: false,
-        permissions: [],
-        connectedAt: new Date().toISOString(),
-      })
-    );
-
+    localStorage.setItem("harold_health", JSON.stringify({ connected: false, permissions: [], connectedAt: new Date().toISOString() }));
     setHealthConnected(false);
     setStep(3);
   };
 
   const handleSkip = () => {
-    localStorage.setItem(
-      "harold_health",
-      JSON.stringify({
-        connected: false,
-        permissions: [],
-        connectedAt: new Date().toISOString(),
-      })
-    );
-
+    localStorage.setItem("harold_health", JSON.stringify({ connected: false, permissions: [], connectedAt: new Date().toISOString() }));
     setHealthConnected(false);
     setStep(3);
   };
 
-  const enabledPermissions = Object.entries(permissions)
-    .filter(([, v]) => v)
-    .map(([k]) => k);
+  const enabledPermissions = Object.entries(permissions).filter(([, v]) => v).map(([k]) => k);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-[100dvh] max-w-[430px] mx-auto bg-background">
       <Navbar />
       <div className="max-w-lg mx-auto px-6 pt-20 pb-16">
         <AnimatePresence mode="wait">
           {step === 1 && (
-            <motion.div
-              key="step-1"
-              initial={stepTransition.initial}
-              animate={stepTransition.animate}
-              exit={stepTransition.exit}
-              transition={stepTransition.transition}
-            >
+            <motion.div key="step-1" initial={stepTransition.initial} animate={stepTransition.animate} exit={stepTransition.exit} transition={stepTransition.transition}>
               <div className="text-center mb-8">
-                <motion.div
-                  className="inline-block mb-4"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
+                <motion.div className="inline-block mb-4" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
                   <Image src="/harold-mascot.png" alt="Harold mascot" width={80} height={80} className="mx-auto" />
                 </motion.div>
                 <h1 className="font-serif text-3xl mb-3">Connect Your Health Data</h1>
-                <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto">
-                  Harold can observe patterns from your health data&mdash;sleep, recovery, activity&mdash;and help you understand what they mean.
-                </p>
+                <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto">Harold can observe patterns from your health data&mdash;sleep, recovery, activity&mdash;and help you understand what they mean.</p>
               </div>
               <div className="space-y-3 mb-6">
                 {DATA_CATEGORIES.map((cat, i) => (
                   <motion.div key={cat.title} custom={i} variants={cardVariants} initial="hidden" animate="visible" whileHover={{ scale: 1.02 }} className="bg-surface border border-border rounded-2xl p-5 flex items-start gap-4">
                     <span className="text-2xl mt-0.5">{cat.emoji}</span>
-                    <div>
-                      <p className="text-sm font-medium mb-1">{cat.title}</p>
-                      <p className="text-xs text-muted/50 leading-relaxed">{cat.description}</p>
-                    </div>
+                    <div><p className="text-sm font-medium mb-1">{cat.title}</p><p className="text-xs text-muted/50 leading-relaxed">{cat.description}</p></div>
                   </motion.div>
                 ))}
               </div>
               <motion.div custom={3} variants={cardVariants} initial="hidden" animate="visible" className="rounded-2xl p-5 mb-8 border border-white/[0.06]" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)", backdropFilter: "blur(12px)" }}>
                 <div className="flex items-start gap-3">
                   <span className="text-lg">&#x1F512;</span>
-                  <div>
-                    <p className="text-sm font-medium mb-1">Your data stays private</p>
-                    <p className="text-xs text-muted/50 leading-relaxed">Harold only sees patterns and trends&mdash;never raw numbers. Your data never leaves your device.</p>
-                  </div>
+                  <div><p className="text-sm font-medium mb-1">Your data stays private</p><p className="text-xs text-muted/50 leading-relaxed">Harold only sees patterns and trends&mdash;never raw numbers. Your data never leaves your device.</p></div>
                 </div>
               </motion.div>
               <div className="space-y-3">
