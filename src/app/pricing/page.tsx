@@ -38,7 +38,7 @@ export default function PricingPage() {
   const savings = Math.round((1 - yearlyPrice / monthlyPrice) * 100);
 
   return (
-    <div className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground">
+    <div className="min-h-full bg-background text-foreground">
       <Navbar />
       <main className="max-w-4xl mx-auto px-6 pt-28 pb-20">
         {/* Header */}
