@@ -22,21 +22,21 @@ const energyLabels = ["Exhausted", "Low", "Moderate", "Good", "High"];
 const stressLabels = ["Calm", "Mild", "Moderate", "High", "Overwhelming"];
 
 const movementOptions = [
-  { emoji: "\u{1F6B6}", label: "Walking", value: "walking" },
-  { emoji: "\u{1F3C3}", label: "Running", value: "running" },
-  { emoji: "\u{1F9D8}", label: "Yoga/Stretch", value: "yoga" },
-  { emoji: "\u{1F3C0}", label: "Sports", value: "sports" },
-  { emoji: "\u{1F3CB}\uFE0F", label: "Gym", value: "gym" },
-  { emoji: "\u274C", label: "None today", value: "none" },
+  { emoji: "🚶", label: "Walking", value: "walking" },
+  { emoji: "🏃", label: "Running", value: "running" },
+  { emoji: "🧘", label: "Yoga/Stretch", value: "yoga" },
+  { emoji: "🏀", label: "Sports", value: "sports" },
+  { emoji: "🏋️", label: "Gym", value: "gym" },
+  { emoji: "❌", label: "None today", value: "none" },
 ];
 
 const moodOptions = [
-  { emoji: "\u{1F60A}", label: "Good", value: "good" },
-  { emoji: "\u{1F610}", label: "Neutral", value: "neutral" },
-  { emoji: "\u{1F614}", label: "Low", value: "low" },
-  { emoji: "\u{1F630}", label: "Anxious", value: "anxious" },
-  { emoji: "\u{1F620}", label: "Frustrated", value: "frustrated" },
-  { emoji: "\u{1F971}", label: "Drained", value: "drained" },
+  { emoji: "😊", label: "Good", value: "good" },
+  { emoji: "😐", label: "Neutral", value: "neutral" },
+  { emoji: "😔", label: "Low", value: "low" },
+  { emoji: "😰", label: "Anxious", value: "anxious" },
+  { emoji: "😠", label: "Frustrated", value: "frustrated" },
+  { emoji: "🥱", label: "Drained", value: "drained" },
 ];
 
 const stepVariants = {
