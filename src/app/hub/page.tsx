@@ -118,7 +118,7 @@ export default function HubPage() {
                 <span className="text-lg">&#x2728;</span>
                 <span className="text-sm font-medium">Integrated Sync</span>
               </div>
-              <p className="text-xs text-muted/50 leading-relaxed mb-3">Auto-sync Apple Health & wearables. Harold reads your data automatically — no manual entry.</p>
+              <p className="text-xs text-muted/50 leading-relaxed mb-3">Auto-sync Apple Health & wearables. Harold reads your data automatically \u2014 no manual entry.</p>
               <span className="text-xs text-accent group-hover:text-accent-soft transition-colors flex items-center gap-1">View pricing <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </Link>
           </div>
