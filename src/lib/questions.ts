@@ -1,212 +1,452 @@
 export type QuestionType = "single_choice" | "multi_select" | "slider";
-export interface QuestionOption { label: string; subtitle?: string; emoji: string; value: string; }
-export interface Question { id: number; part: 1 | 2; text: string; sensitiveText: string; hint?: string; type: QuestionType; options?: QuestionOption[]; sliderMin?: number; sliderMax?: number; sliderMinLabel?: string; sliderMaxLabel?: string; cardLayout?: "grid" | "list"; }
+
+export interface QuestionOption {
+  label: string;
+  subtitle?: string;
+  emoji?: string;
+  value: string;
+  /** Image URL used in the image-grid card layout */
+  image?: string;
+}
+
+export interface Question {
+  id: number;
+  part: 1 | 2;
+  text: string;
+  sensitiveText: string;
+  hint?: string;
+  type: QuestionType;
+  options?: QuestionOption[];
+  sliderMin?: number;
+  sliderMax?: number;
+  sliderMinLabel?: string;
+  sliderMaxLabel?: string;
+  cardLayout?: "grid" | "list";
+}
+
+/** Unsplash helpers — warm lifestyle photography */
+const img = (id: string) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=80`;
+
 export const questions: Question[] = [
   {
-    id: 1, part: 1,
-    text: "When you felt most like yourself — what did mornings look like?",
-    sensitiveText: "When things felt easier — what did mornings look like?",
-    hint: "No wrong answers. Just a starting point.",
+    id: 1,
+    part: 1,
+    text: "What does your morning usually look like?",
+    sensitiveText: "When things feel easier, what do mornings look like?",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Had a routine", subtitle: "Coffee, workout, quiet time before the day", emoji: "\u2615", value: "early_routine" },
-      { label: "Slow & easy", subtitle: "No rush, no pressure, no alarms", emoji: "\u{1F319}", value: "slow_mornings" },
-      { label: "Straight into it", subtitle: "Sport, creative work, something I loved", emoji: "\u26A1", value: "passion_first" },
-      { label: "Not a morning person", subtitle: "I came alive later in the day", emoji: "\u{1F634}", value: "not_morning" },
-      { label: "Can't remember", subtitle: "But it felt easier than now", emoji: "\u{1F32B}\u{FE0F}", value: "easier_then" },
+      {
+        label: "Slow & Intentional",
+        value: "early_routine",
+        image: img("photo-1507120410856-1f35574c3b45"),
+      },
+      {
+        label: "Coffee & Go",
+        value: "passion_first",
+        image: img("photo-1509042239860-f550ce710b93"),
+      },
+      {
+        label: "A few extra mins of sleep",
+        value: "slow_mornings",
+        image: img("photo-1541199249251-f713e6145474"),
+      },
+      {
+        label: "Catching up",
+        value: "not_morning",
+        image: img("photo-1512446816042-444d641267d4"),
+      },
     ],
   },
   {
-    id: 2, part: 1,
-    text: "What did you actually do with your free time?",
-    sensitiveText: "What did you find yourself drawn to?",
-    hint: "Not what you thought you should do — what you chose.",
+    id: 2,
+    part: 1,
+    text: "What's the most realistic way you move today?",
+    sensitiveText: "What kind of movement feels right for you now?",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Moved my body", subtitle: "Running, gym, sports, hiking", emoji: "\u{1F3C3}", value: "movement" },
-      { label: "People", subtitle: "Time with friends who mattered", emoji: "\u{1F91D}", value: "social" },
-      { label: "Created things", subtitle: "Writing, music, art, building", emoji: "\u{1F3A8}", value: "creative" },
-      { label: "Explored", subtitle: "Read, watched, fed my curiosity", emoji: "\u{1F4DA}", value: "curious" },
-      { label: "Just relaxed", subtitle: "And that was enough", emoji: "\u{1F6CB}\u{FE0F}", value: "relax" },
-      { label: "A bit of everything", subtitle: "Depended on the day", emoji: "\u{1F300}", value: "mix" },
+      {
+        label: "Walk / Jog / Run",
+        value: "movement",
+        image: img("photo-1552674605-db6ffd4facb5"),
+      },
+      {
+        label: "Home workouts",
+        value: "home_workout",
+        image: img("photo-1518611012118-696072aa579a"),
+      },
+      {
+        label: "Sport",
+        value: "sport",
+        image: img("photo-1526676037777-05a232554f77"),
+      },
+      {
+        label: "Gym",
+        value: "gym",
+        image: img("photo-1517836357463-d25dfeac3438"),
+      },
+      {
+        label: "Group Classes",
+        value: "group_classes",
+        image: img("photo-1571019613454-1cb2f99b2d8b"),
+      },
+      {
+        label: "Not much right now",
+        value: "relax",
+        image: img("photo-1518455027359-f3f8164ba6bd"),
+      },
     ],
   },
   {
-    id: 3, part: 1,
+    id: 3,
+    part: 1,
     text: "How did you used to recharge?",
     sensitiveText: "What helped you feel rested?",
     hint: "Think about what actually worked.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Moving", subtitle: "A run, a sport, a long walk", emoji: "\u{1F3C3}\u200D\u2642\u{FE0F}", value: "A" },
-      { label: "People", subtitle: "Being around those who energize me", emoji: "\u{1F46B}", value: "B" },
-      { label: "Stillness", subtitle: "Alone time, reading, music", emoji: "\u{1F9D8}", value: "C" },
-      { label: "Creating", subtitle: "Building or making something", emoji: "\u{1F528}", value: "D" },
-      { label: "All of it", subtitle: "A mix depending on the week", emoji: "\u2728", value: "E" },
+      {
+        label: "Moving",
+        value: "A",
+        image: img("photo-1502224562085-639556652f33"),
+      },
+      {
+        label: "People",
+        value: "B",
+        image: img("photo-1529156069898-49953e39b3ac"),
+      },
+      {
+        label: "Stillness",
+        value: "C",
+        image: img("photo-1470770841072-f978cf4d019e"),
+      },
+      {
+        label: "Creating",
+        value: "D",
+        image: img("photo-1452860606245-08befc0ff44b"),
+      },
     ],
   },
   {
-    id: 4, part: 1,
+    id: 4,
+    part: 1,
     text: "When you were at your most consistent — what did it feel like?",
     sensitiveText: "When things felt steady — what did it feel like?",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Effortless", subtitle: "It just happened naturally", emoji: "\u{1F343}", value: "A" },
-      { label: "Disciplined", subtitle: "I worked for it every day", emoji: "\u{1F4AA}", value: "B" },
-      { label: "Social", subtitle: "Others kept me on track", emoji: "\u{1F465}", value: "C" },
-      { label: "Structural", subtitle: "The environment made it easy", emoji: "\u{1F3D7}\u{FE0F}", value: "D" },
+      {
+        label: "Effortless",
+        value: "A",
+        image: img("photo-1500530855697-b586d89ba3ee"),
+      },
+      {
+        label: "Disciplined",
+        value: "B",
+        image: img("photo-1540575467063-178a50c2df87"),
+      },
+      {
+        label: "Social",
+        value: "C",
+        image: img("photo-1529156069898-49953e39b3ac"),
+      },
+      {
+        label: "Structural",
+        value: "D",
+        image: img("photo-1556761175-5973dc0f32e7"),
+      },
     ],
   },
   {
-    id: 5, part: 1,
-    text: "What have you quietly stopped doing?",
+    id: 5,
+    part: 1,
+    text: "What have you stopped doing that you miss?",
     sensitiveText: "What has quietly faded from your routine?",
-    hint: "The thing you haven't really told anyone about.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Working out", subtitle: "Sport, gym, or any movement", emoji: "\u{1F3CB}\u{FE0F}", value: "exercise" },
-      { label: "Cooking", subtitle: "Real meals, not delivery", emoji: "\u{1F373}", value: "cooking" },
-      { label: "Reading", subtitle: "Books, learning, curiosity", emoji: "\u{1F4D6}", value: "reading" },
-      { label: "Seeing friends", subtitle: "Real connection, not just texts", emoji: "\u{1F44B}", value: "friends" },
-      { label: "A creative hobby", subtitle: "Music, writing, art", emoji: "\u{1F3B5}", value: "creative" },
-      { label: "Going outside", subtitle: "Walking, thinking, fresh air", emoji: "\u{1F333}", value: "walking" },
-      { label: "Self-care", subtitle: "Looking after how I feel", emoji: "\u{1FA9E}", value: "self_care" },
-      { label: "Sleeping well", subtitle: "Proper rest, not just crashing", emoji: "\u{1F4A4}", value: "sleep" },
+      {
+        label: "Regular exercise",
+        value: "exercise",
+        image: img("photo-1518611012118-696072aa579a"),
+      },
+      {
+        label: "Creative hobbies",
+        value: "creative",
+        image: img("photo-1452860606245-08befc0ff44b"),
+      },
+      {
+        label: "Being social / present",
+        value: "friends",
+        image: img("photo-1529156069898-49953e39b3ac"),
+      },
+      {
+        label: "Reading / Learning",
+        value: "reading",
+        image: img("photo-1512820790803-83ca734da794"),
+      },
     ],
   },
   {
-    id: 6, part: 1,
+    id: 6,
+    part: 1,
     text: "What part of your day did you used to protect?",
     sensitiveText: "Was there a part of your day that felt sacred?",
-    hint: "The thing you wouldn't let anything touch.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "My mornings", subtitle: "Before the world got loud", emoji: "\u{1F305}", value: "mornings" },
-      { label: "My workouts", subtitle: "Non-negotiable movement time", emoji: "\u{1F525}", value: "workouts" },
-      { label: "My meals", subtitle: "I actually sat down and ate", emoji: "\u{1F37D}\u{FE0F}", value: "meals" },
-      { label: "My evenings", subtitle: "Wind-down, my time", emoji: "\u{1F30C}", value: "evenings" },
-      { label: "People time", subtitle: "Connection with those I care about", emoji: "\u2764\u{FE0F}", value: "people" },
-      { label: "Nothing specific", subtitle: "It all just flowed", emoji: "\u{1F30A}", value: "flowed" },
+      {
+        label: "Mornings",
+        value: "mornings",
+        image: img("photo-1507525428034-b723cf961d3e"),
+      },
+      {
+        label: "Workouts",
+        value: "workouts",
+        image: img("photo-1534438327276-14e5300c3a48"),
+      },
+      {
+        label: "Meals",
+        value: "meals",
+        image: img("photo-1484723091739-30a097e8f929"),
+      },
+      {
+        label: "Evenings",
+        value: "evenings",
+        image: img("photo-1505142468610-359e7d316be0"),
+      },
     ],
   },
   {
-    id: 7, part: 1,
-    text: "Your average Tuesday now — what's the first feeling?",
+    id: 7,
+    part: 1,
+    text: "How do you feel on an average Tuesday?",
     sensitiveText: "A typical day now — what feeling comes up?",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Busy but okay", subtitle: "I'm managing", emoji: "\u{1F604}", value: "A" },
-      { label: "Productive but hollow", subtitle: "Getting things done, feeling empty", emoji: "\u{1F610}", value: "B" },
-      { label: "Bone tired", subtitle: "In a way sleep doesn't fix", emoji: "\u{1F629}", value: "C" },
-      { label: "A bit lost", subtitle: "Honestly, I don't know", emoji: "\u{1F636}\u200D\u{1F32B}\u{FE0F}", value: "D" },
-      { label: "Adapting", subtitle: "Different but I'm figuring it out", emoji: "\u{1F331}", value: "E" },
+      {
+        label: "Pretty good",
+        value: "A",
+        image: img("photo-1506905925346-21bda4d32df4"),
+      },
+      {
+        label: "Going with the flow",
+        value: "B",
+        image: img("photo-1519681393784-d120267933ba"),
+      },
+      {
+        label: "Depends on the day",
+        value: "E",
+        image: img("photo-1418065460487-3e41a6c84dc5"),
+      },
+      {
+        label: "Overwhelmed",
+        value: "C",
+        image: img("photo-1499209974431-9dddcece7f88"),
+      },
     ],
   },
   {
-    id: 8, part: 2,
+    id: 8,
+    part: 2,
     text: "How much of your identity is your job right now?",
     sensitiveText: "How much of who you are is connected to work?",
     hint: "Slide to where it feels honest.",
     type: "slider",
-    sliderMin: 0, sliderMax: 100,
-    sliderMinLabel: "None of it", sliderMaxLabel: "Almost all of it",
+    sliderMin: 0,
+    sliderMax: 100,
+    sliderMinLabel: "None of it",
+    sliderMaxLabel: "Almost all of it",
   },
   {
-    id: 9, part: 2,
+    id: 9,
+    part: 2,
     text: "Last time you did something purely for joy?",
     sensitiveText: "Last time you did something just because it felt good?",
-    hint: "Not productive. Not impressive. Just good.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "This week", subtitle: "I still make time for it", emoji: "\u{1F31F}", value: "A" },
-      { label: "This month", subtitle: "It happens but less often", emoji: "\u{1F4C5}", value: "B" },
-      { label: "Can't remember", subtitle: "It's been a while", emoji: "\u{1F614}", value: "C" },
-      { label: "I don't let myself", subtitle: "Joy feels like a luxury now", emoji: "\u{1F512}", value: "D" },
+      {
+        label: "This week",
+        value: "A",
+        image: img("photo-1531058020387-3be344556be6"),
+      },
+      {
+        label: "This month",
+        value: "B",
+        image: img("photo-1523580494863-6f3031224c94"),
+      },
+      {
+        label: "Can't remember",
+        value: "C",
+        image: img("photo-1499209974431-9dddcece7f88"),
+      },
+      {
+        label: "I don't let myself",
+        value: "D",
+        image: img("photo-1521790797524-b2497295b8a0"),
+      },
     ],
   },
   {
-    id: 10, part: 2,
-    text: "When you're stressed — what do you reach for first?",
+    id: 10,
+    part: 2,
+    text: "When stressed, what do you reach for?",
     sensitiveText: "When you're overwhelmed — what do you turn to?",
-    hint: "Be honest. This is just for you.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "My phone", subtitle: "Scrolling, apps, doom loops", emoji: "\u{1F4F1}", value: "phone" },
-      { label: "Food", subtitle: "Snacking, delivery, comfort eating", emoji: "\u{1F354}", value: "food" },
-      { label: "Shopping", subtitle: "Buying things I don't need", emoji: "\u{1F6D2}", value: "shopping" },
-      { label: "TV / streaming", subtitle: "Numbing out with a screen", emoji: "\u{1F4FA}", value: "tv" },
-      { label: "More work", subtitle: "I just keep going", emoji: "\u{1F4BB}", value: "work" },
-      { label: "I shut down", subtitle: "Nothing specific, I just check out", emoji: "\u{1F6CF}\u{FE0F}", value: "shutdown" },
+      {
+        label: "Comfort Food",
+        value: "food",
+        image: img("photo-1568901346375-23c9450c58cd"),
+      },
+      {
+        label: "Social Media",
+        value: "phone",
+        image: img("photo-1512428559087-560fa5ceab42"),
+      },
+      {
+        label: "Isolate",
+        value: "shutdown",
+        image: img("photo-1455642305367-68834a9d4337"),
+      },
+      {
+        label: "Movement / Exercise",
+        value: "exercise",
+        image: img("photo-1486218119243-13883505764c"),
+      },
     ],
   },
   {
-    id: 11, part: 2,
-    text: "Which of these feel true right now?",
+    id: 11,
+    part: 2,
+    text: "Which patterns feel the most familiar?",
     sensitiveText: "Do any of these feel familiar?",
     hint: "Select all that resonate.",
     type: "multi_select",
     cardLayout: "list",
     options: [
-      { label: "Busier than ever, less like myself", emoji: "\u{1F3C3}", value: "busier_less_self" },
-      { label: "Know what to do, just don't do it", emoji: "\u{1F914}", value: "know_dont_do" },
-      { label: "Stopped things I loved without deciding to", emoji: "\u{1F494}", value: "stopped_without_deciding" },
-      { label: "Check my phone too much", emoji: "\u{1F4F1}", value: "phone_checking" },
-      { label: "Performing a version of myself", emoji: "\u{1F3AD}", value: "performing_self" },
-      { label: "Different person at night than during the day", emoji: "\u{1F319}", value: "night_different" },
+      { label: "Staying up later than planned", value: "night_different" },
+      { label: "Too much screen time", value: "phone_checking" },
+      { label: "Irregular food habits", value: "irregular_food" },
+      { label: "Poor sleep", value: "poor_sleep" },
+      { label: "Not going out like I used to", value: "stopped_without_deciding" },
+      { label: "Socially absent", value: "busier_less_self" },
     ],
   },
   {
-    id: 12, part: 2,
+    id: 12,
+    part: 2,
     text: "When do you feel most like yourself?",
     sensitiveText: "When do you feel most at ease?",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Morning", subtitle: "Before the noise starts", emoji: "\u{1F305}", value: "A" },
-      { label: "Afternoon", subtitle: "When I'm in a groove", emoji: "\u2600\u{FE0F}", value: "B" },
-      { label: "Evening", subtitle: "When the day is done", emoji: "\u{1F307}", value: "C" },
-      { label: "Rarely", subtitle: "Honestly, not often anymore", emoji: "\u{1F32B}\u{FE0F}", value: "D" },
+      {
+        label: "Morning",
+        value: "A",
+        image: img("photo-1506368249639-73a05d6f6488"),
+      },
+      {
+        label: "Afternoon",
+        value: "B",
+        image: img("photo-1500534314209-a25ddb2bd429"),
+      },
+      {
+        label: "Evening",
+        value: "C",
+        image: img("photo-1502082553048-f009c37129b9"),
+      },
+      {
+        label: "Rarely",
+        value: "D",
+        image: img("photo-1500964757637-c85e8a162699"),
+      },
     ],
   },
   {
-    id: 13, part: 2,
+    id: 13,
+    part: 2,
     text: "Which version of yourself do you miss?",
     sensitiveText: "What part of yourself would you like back?",
-    hint: "Even a small piece counts.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "The active one", subtitle: "Who took care of their body", emoji: "\u{1F4AA}", value: "active_self" },
-      { label: "The creative one", subtitle: "Who had passions outside work", emoji: "\u{1F3A8}", value: "creative_self" },
-      { label: "The present one", subtitle: "Who wasn't always distracted", emoji: "\u{1F9D8}", value: "present_self" },
-      { label: "The confident one", subtitle: "Who felt in control", emoji: "\u{1F451}", value: "confident_self" },
-      { label: "The connected one", subtitle: "Who had deeper relationships", emoji: "\u{1F49B}", value: "social_self" },
-      { label: "Not sure", subtitle: "Something feels off, that's all I know", emoji: "\u{1F50D}", value: "something_off" },
+      {
+        label: "The active one",
+        value: "active_self",
+        image: img("photo-1552674605-db6ffd4facb5"),
+      },
+      {
+        label: "The creative one",
+        value: "creative_self",
+        image: img("photo-1452860606245-08befc0ff44b"),
+      },
+      {
+        label: "The present one",
+        value: "present_self",
+        image: img("photo-1506905925346-21bda4d32df4"),
+      },
+      {
+        label: "The confident one",
+        value: "confident_self",
+        image: img("photo-1500648767791-00dcc994a43e"),
+      },
+      {
+        label: "The connected one",
+        value: "social_self",
+        image: img("photo-1529156069898-49953e39b3ac"),
+      },
+      {
+        label: "Not sure yet",
+        value: "something_off",
+        image: img("photo-1507003211169-0a1dd7228f2d"),
+      },
     ],
   },
   {
-    id: 14, part: 2,
+    id: 14,
+    part: 2,
     text: "What changed that made the old routines hard?",
     sensitiveText: "What shifted that made things harder?",
-    hint: "The honest answer, not the polished one.",
     type: "single_choice",
     cardLayout: "grid",
     options: [
-      { label: "Work took over", subtitle: "No time or energy left", emoji: "\u{1F4BC}", value: "work_took_over" },
-      { label: "Life changed", subtitle: "Moved, new job, lost my structure", emoji: "\u{1F504}", value: "life_change" },
-      { label: "Family grew", subtitle: "Relationships or kids need more", emoji: "\u{1F46A}", value: "relationships" },
-      { label: "Gradual drift", subtitle: "No single reason, it just happened", emoji: "\u{1F32B}\u{FE0F}", value: "gradual_drift" },
-      { label: "Body changed", subtitle: "Old habits stopped working", emoji: "\u{1FA9F}", value: "body_changed" },
-      { label: "Burnout", subtitle: "Stress, anxiety, or exhaustion", emoji: "\u{1F525}", value: "mental_health" },
+      {
+        label: "Work took over",
+        value: "work_took_over",
+        image: img("photo-1556761175-5973dc0f32e7"),
+      },
+      {
+        label: "Life changed",
+        value: "life_change",
+        image: img("photo-1517436026-beea98725a0b"),
+      },
+      {
+        label: "Relationships",
+        value: "relationships",
+        image: img("photo-1511895426328-dc8714191300"),
+      },
+      {
+        label: "Gradual drift",
+        value: "gradual_drift",
+        image: img("photo-1418065460487-3e41a6c84dc5"),
+      },
+      {
+        label: "Body changed",
+        value: "body_changed",
+        image: img("photo-1552196563-55cd4e45efb3"),
+      },
+      {
+        label: "Burnout",
+        value: "mental_health",
+        image: img("photo-1499209974431-9dddcece7f88"),
+      },
     ],
   },
 ];

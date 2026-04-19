@@ -2,162 +2,369 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import HaroldOrb from "@/components/HaroldOrb";
-import type { HaroldOrbState } from "@/components/HaroldOrb";
 
-interface Insight { text: string; severity: "mild" | "moderate"; state: HaroldOrbState; observation: string; noticed: string[]; suggestions: string[]; weekDots: ("green" | "yellow" | "red")[]; }
+interface Insight {
+  headline: string;
+  body: string;
+  weekDots: ("green" | "yellow" | "red")[];
+  haroldNote: string;
+}
 
 const insights: Insight[] = [
-  { text: "You\u2019ve been a bit out of rhythm this week", severity: "mild", state: "neutral", observation: "Your activity pattern shifted compared to last week. You moved less on the days you usually move most, and your rest days didn\u2019t feel particularly restful either. It\u2019s not alarming \u2014 just a pattern worth noticing.", noticed: ["Monday and Wednesday had almost no movement", "Sleep quality dipped mid-week", "Weekend activity was higher than usual, possibly compensating"], suggestions: ["Try a short walk tomorrow morning to reset your rhythm", "Consider a lighter session instead of skipping entirely", "Set a gentle reminder for your usual Wednesday activity"], weekDots: ["green", "red", "yellow", "red", "yellow", "green", "green"] },
-  { text: "Your stress seems to be accumulating", severity: "moderate", state: "stressed", observation: "Over the past few days, the signals Harold tracks have been trending in a direction that suggests mounting tension. Heart rate variability is lower than your baseline, and you\u2019ve been less active than usual.", noticed: ["Heart rate variability dropped 15% from your baseline", "Three consecutive days with minimal movement", "Evening restlessness patterns detected"], suggestions: ["A gentle yoga or stretching session could help reset", "Try a 10-minute breathing exercise before bed tonight", "Consider joining the Thursday Evening Yoga this week"], weekDots: ["yellow", "yellow", "red", "red", "red", "yellow", "yellow"] },
-  { text: "You seem more steady after slower sessions", severity: "mild", state: "recovered", observation: "Harold noticed something interesting: after your slower-paced activities, your recovery metrics improve noticeably. Your body seems to respond well to gentler movement rather than intense sessions right now.", noticed: ["Recovery scores are 20% better after easy-paced activities", "Sleep quality improves on days with gentle movement", "Your best days this week followed low-intensity sessions"], suggestions: ["Lean into slower sessions for the next week", "The Sunday Morning Easy Run could be a great fit", "Try pairing gentle movement with your lunch break"], weekDots: ["yellow", "green", "green", "yellow", "green", "green", "green"] },
-  { text: "Something feels slightly off today", severity: "moderate", state: "stressed", observation: "Today\u2019s readings are a bit different from your recent pattern. It\u2019s subtle \u2014 nothing dramatic \u2014 but Harold wanted to flag it so you can check in with yourself.", noticed: ["Morning heart rate was elevated compared to your norm", "Movement patterns suggest restlessness", "Your typical rhythm feels disrupted today"], suggestions: ["Take a few minutes to check in with how you\u2019re feeling", "A short walk might help you recalibrate", "Don\u2019t push yourself if something feels off \u2014 rest is okay"], weekDots: ["green", "green", "yellow", "green", "yellow", "yellow", "red"] },
-  { text: "Good to see you finding some rhythm", severity: "mild", state: "thriving", observation: "This has been one of your more consistent weeks. You\u2019ve been moving regularly, sleeping better, and your overall pattern looks steady. Harold just wanted to acknowledge that \u2014 consistency matters more than intensity.", noticed: ["Five out of seven days had meaningful movement", "Sleep consistency improved over the week", "Your recovery metrics are trending upward"], suggestions: ["Keep doing what you\u2019re doing \u2014 it\u2019s working", "Consider adding a social activity to build connection", "The Sunday run could help anchor this rhythm long-term"], weekDots: ["green", "green", "green", "yellow", "green", "green", "green"] },
+  {
+    headline: "Something feels slightly off today",
+    body: "Your energy is dipping, sleep's been erratic, and the weekend is coming up fast. Subtle, but worth noticing.",
+    weekDots: ["yellow", "yellow", "green", "yellow", "red", "yellow", "yellow"],
+    haroldNote:
+      "Some light movement might help right now. Even 15 minutes of the rest of your day feels. Don't stress it.",
+  },
+  {
+    headline: "You've been finding rhythm this week",
+    body: "Movement is up, sleep is steadier, and your recovery numbers look good. Nice and steady.",
+    weekDots: ["green", "green", "green", "yellow", "green", "green", "green"],
+    haroldNote:
+      "Keep it slow, keep it honest. Something social this weekend could lock it in.",
+  },
+  {
+    headline: "Stress seems to be accumulating",
+    body: "A few late nights and quiet mornings. Your body is asking for a softer gear.",
+    weekDots: ["yellow", "red", "red", "red", "yellow", "yellow", "green"],
+    haroldNote: "A gentler session today could reset the rhythm. No hero hours.",
+  },
 ];
 
-const secondaryActivities = [
-  { name: "Lunch Walk Tomorrow", atmosphere: "Casual, drop-in, no commitment", timing: "Tuesday 12:30 PM", haroldNote: "Low effort. Might be a good way to break up your day.", href: "/hub/activity/lunch-walk" },
-  { name: "Pickup Basketball Tonight", atmosphere: "Competitive but welcoming, all skill levels", timing: "Tonight 7:00 PM", haroldNote: "You\u2019ve had good energy the past few days. This could be a good outlet.", href: "/hub/activity/pickup-basketball" },
-  { name: "Thursday Evening Yoga", atmosphere: "Gentle, restorative, beginner-friendly", timing: "Thursday 6:30 PM", haroldNote: "Slower sessions might help right now.", href: "/hub/activity/evening-yoga" },
+interface Activity {
+  slug: string;
+  title: string;
+  tag: string;
+  when: string;
+  image: string;
+}
+
+const activities: Activity[] = [
+  {
+    slug: "sunday-run",
+    title: "East Lawn Park",
+    tag: "Easy Jog / Walk",
+    when: "Sun · 8:00 AM",
+    image:
+      "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    slug: "pickup-basketball",
+    title: "Pickup Basketball",
+    tag: "Casual, all levels",
+    when: "Tonight · 7:00 PM",
+    image:
+      "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    slug: "morning-walkk",
+    title: "Morning Walk",
+    tag: "Gentle · waterfront",
+    when: "Wed · 7:15 AM",
+    image:
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    slug: "evening-yoga",
+    title: "Mat & an Hour",
+    tag: "Restorative yoga",
+    when: "Thu · 6:30 PM",
+    image:
+      "https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=400&q=80",
+  },
 ];
 
-function getGreeting(): string { const h = new Date().getHours(); if (h < 12) return "Good morning"; if (h < 18) return "Good afternoon"; return "Good evening"; }
-const dotColor: Record<string, string> = { green: "bg-emerald-400", yellow: "bg-amber-400", red: "bg-red-400" };
-const stateColor: Record<HaroldOrbState, string> = { stressed: "bg-red-400", neutral: "bg-[#FF8897]", recovered: "bg-purple-400", thriving: "bg-emerald-400" };
-const stateLabel: Record<HaroldOrbState, string> = { stressed: "Stressed", neutral: "Neutral", recovered: "Recovered", thriving: "Thriving" };
-
-const sectionVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } } };
-const cardHover = { y: -6, transition: { type: "spring" as const, stiffness: 300, damping: 20 } };
-const staggerContainer = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
-const staggerItem = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } } };
-const statPillVariants = { hidden: { opacity: 0, scale: 0.85 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: "easeOut" as const } } };
+const dotColor: Record<string, string> = {
+  green: "#6B8F6B",
+  yellow: "#D9A569",
+  red: "#D98B7A",
+};
 
 export default function HubPage() {
-  const router = useRouter();
-  const [greeting, setGreeting] = useState("Good evening");
-  const [insight, setInsight] = useState<Insight | null>(null);
-  const [insightExpanded, setInsightExpanded] = useState(false);
-  const [healthConnected, setHealthConnected] = useState(false);
+  const [greeting, setGreeting] = useState("Welcome back");
+  const [insight, setInsight] = useState<Insight>(insights[0]);
   const [archetype, setArchetype] = useState<string | null>(null);
 
   useEffect(() => {
-    setGreeting(getGreeting());
+    const h = new Date().getHours();
+    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
     setInsight(insights[Math.floor(Math.random() * insights.length)]);
-    try { const hc = localStorage.getItem("health_connected"); if (hc === "true") setHealthConnected(true); } catch {}
-    try { const raw = localStorage.getItem("harold_profile"); if (raw) { const p = JSON.parse(raw); if (p?.archetype) setArchetype(p.archetype); } } catch {}
-
     try {
-      const lastActivity = localStorage.getItem("harold_last_activity");
-      if (lastActivity) {
-        const parsed = JSON.parse(lastActivity);
-        const hoursSince = (Date.now() - new Date(parsed.attendedAt).getTime()) / 3600000;
-        if (hoursSince <= 48 && !parsed.reflectionShown) {
-          router.push("/reflection");
-        }
+      const raw = localStorage.getItem("harold_profile");
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p?.archetype) setArchetype(p.archetype);
       }
     } catch {}
-  }, [router]);
+  }, []);
 
   return (
-    <div className="min-h-full bg-background text-foreground"><Navbar />
-      <main className="max-w-4xl mx-auto px-6 pt-24 pb-16 space-y-10">
-        <motion.header className="flex items-center gap-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <Image src="/harold-mascot.png" alt="Harold" width={40} height={40} className="rounded-xl shadow-md shadow-accent/10 ring-1 ring-white/[0.06]" />
-          <div><h1 className="font-serif text-2xl">{greeting}</h1>
-            {archetype && (<motion.span className="inline-block mt-1 text-xs text-[#FF8897]/70 bg-[#FF8897]/10 px-2.5 py-0.5 rounded-full" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 0.4 }}>Welcome back, {archetype}</motion.span>)}
-          </div>
-        </motion.header>
+    <div
+      className="min-h-full"
+      style={{ background: "var(--gradient-page)" }}
+    >
+      {/* Header */}
+      <header className="flex items-center justify-between px-5 pt-14 pb-3">
+        <div className="flex flex-col">
+          <span className="text-xs" style={{ color: "var(--muted-soft)" }}>
+            {greeting}
+          </span>
+          {archetype && (
+            <span
+              className="font-serif italic text-sm"
+              style={{
+                fontFamily: '"DM Serif Display", Georgia, serif',
+                fontStyle: "italic",
+                color: "var(--accent)",
+              }}
+            >
+              {archetype}
+            </span>
+          )}
+        </div>
+        <Link
+          href="/settings"
+          className="text-xs"
+          style={{ color: "var(--muted-soft)" }}
+        >
+          Settings
+        </Link>
+      </header>
 
-        {insight && (<motion.div className="rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06] overflow-hidden" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}>
-          <button onClick={() => setInsightExpanded((v) => !v)} className="w-full flex items-center gap-4 p-4 text-left">
-            <HaroldOrb size={48} state={insight.state} />
-            <p className="text-sm text-muted flex-1">{insight.text}</p>
-            <motion.svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted/50 shrink-0" animate={{ rotate: insightExpanded ? 180 : 0 }} transition={{ duration: 0.25 }}><path d="m6 9 6 6 6-6" /></motion.svg>
-          </button>
-          <AnimatePresence initial={false}>
-            {insightExpanded && (<motion.div key="detail" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease: "easeInOut" }} className="overflow-hidden">
-              <div className="px-5 pb-5 space-y-5 border-t border-white/[0.04] pt-4">
-                <p className="text-sm text-muted leading-relaxed">{insight.observation}</p>
-                <div className="space-y-2"><span className="text-xs uppercase tracking-wider text-muted/50">Your week at a glance</span>
-                  <div className="flex gap-2">{insight.weekDots.map((c, i) => (<motion.div key={i} className={`w-4 h-4 rounded-full ${dotColor[c]}`} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.08 * i, duration: 0.3, type: "spring", stiffness: 400 }} />))}</div>
-                </div>
-                <div className="space-y-2"><span className="text-xs uppercase tracking-wider text-muted/50">What Harold noticed</span>
-                  <ul className="space-y-1.5">{insight.noticed.map((item, i) => (<motion.li key={i} className="text-sm text-muted/80 flex items-start gap-2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i + 0.2, duration: 0.3 }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#FF8897]/60 shrink-0" />{item}</motion.li>))}</ul>
-                </div>
-                <div className="space-y-2"><span className="text-xs uppercase tracking-wider text-muted/50">What might help</span>
-                  <ul className="space-y-1.5">{insight.suggestions.map((item, i) => (<motion.li key={i} className="text-sm text-muted/80 flex items-start gap-2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i + 0.4, duration: 0.3 }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400/60 shrink-0" />{item}</motion.li>))}</ul>
-                </div>
-                <motion.button onClick={() => setInsightExpanded(false)} className="text-xs text-muted/50 hover:text-foreground transition-colors" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>Dismiss</motion.button>
-              </div>
-            </motion.div>)}
-          </AnimatePresence>
-        </motion.div>)}
-
-        <motion.div className="rounded-2xl bg-surface border border-border overflow-hidden" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
-          <div className="p-5 border-b border-border/50">
-            <h3 className="text-sm font-semibold mb-1">How are you feeling?</h3>
-            <p className="text-xs text-muted/60">Log your daily health to help Harold spot patterns</p>
-          </div>
-          <div className="grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-border/50">
-            <Link href="/check-in" className="p-5 hover:bg-surface-hover transition-colors group">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">&#x270D;&#xFE0F;</span>
-                <span className="text-sm font-medium">Manual Check-in</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Free</span>
-              </div>
-              <p className="text-xs text-muted/50 leading-relaxed mb-3">Tell Harold how you slept, your energy, stress, and movement. Takes 30 seconds.</p>
-              <span className="text-xs text-accent group-hover:text-accent-soft transition-colors flex items-center gap-1">Start check-in <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </Link>
-            <Link href="/pricing" className="p-5 hover:bg-surface-hover transition-colors group relative">
-              <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-gradient-primary text-[10px] font-semibold text-white">Premium</div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">&#x2728;</span>
-                <span className="text-sm font-medium">Integrated Sync</span>
-              </div>
-              <p className="text-xs text-muted/50 leading-relaxed mb-3">Auto-sync Apple Health & wearables. Harold reads your data automatically \u2014 no manual entry.</p>
-              <span className="text-xs text-accent group-hover:text-accent-soft transition-colors flex items-center gap-1">View pricing <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </Link>
-          </div>
-        </motion.div>
-
-        <motion.section className="space-y-3" variants={sectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <motion.span className="uppercase text-xs tracking-wider text-muted/50 block" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>Your anchor</motion.span>
-          <motion.div className="p-8 rounded-2xl bg-surface border border-border relative overflow-hidden" whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-            <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-[#FF8897]/5 blur-3xl pointer-events-none" />
-            <div className="relative space-y-4">
-              <h2 className="font-serif text-xl">Sunday Morning Easy Run</h2>
-              <p className="text-sm text-muted">Easy-paced, conversational, all levels welcome</p>
-              <div className="flex flex-col gap-1 text-sm text-muted"><span>Sundays at 8:00 AM</span><span>Starts at Central Park South entrance</span></div>
-              <p className="text-sm text-[#FF8897]/70 italic">&ldquo;This might help you build some consistency. Longer sessions like this one tend to create rhythm.&rdquo;</p>
-              <p className="text-xs text-muted/40">18 people joined last week</p>
-              <Link href="/hub/activity/sunday-run"><motion.span className="inline-block mt-2 px-5 py-2.5 rounded-full bg-accent text-foreground text-sm font-medium hover:bg-accent-soft transition-colors cursor-pointer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>I&apos;m interested</motion.span></Link>
-            </div>
+      <main className="px-5 pb-24 space-y-6">
+        {/* Insight card */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="mx-auto mb-3"
+          >
+            <Image
+              src="/harold-mascot.png"
+              alt="Harold"
+              width={64}
+              height={64}
+              className="rounded-[30%] mx-auto"
+              style={{ filter: "drop-shadow(0 10px 24px rgba(100,80,60,0.18))" }}
+            />
           </motion.div>
+
+          <p className="text-xs mb-1" style={{ color: "var(--muted-soft)" }}>
+            Something feels slightly off today
+          </p>
+          <h1
+            className="font-serif italic mb-3"
+            style={{
+              fontFamily: '"DM Serif Display", Georgia, serif',
+              fontStyle: "italic",
+              color: "#2C2418",
+              fontSize: "clamp(1.4rem, 5.5vw, 1.8rem)",
+              lineHeight: 1.2,
+            }}
+          >
+            {insight.headline}
+          </h1>
+          <p
+            className="text-sm leading-relaxed mx-auto max-w-sm"
+            style={{ color: "var(--muted)" }}
+          >
+            {insight.body}
+          </p>
+
+          {/* Week dots */}
+          <div className="mt-5 flex justify-center gap-2">
+            {insight.weekDots.map((c, i) => (
+              <motion.div
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  delay: 0.08 * i,
+                  duration: 0.3,
+                  type: "spring",
+                  stiffness: 400,
+                }}
+                className="w-3.5 h-3.5 rounded-full"
+                style={{ background: dotColor[c] }}
+              />
+            ))}
+          </div>
         </motion.section>
 
-        <motion.section className="space-y-3" variants={sectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <span className="uppercase text-xs tracking-wider text-muted/50">This week</span>
-          <motion.div className="grid sm:grid-cols-3 gap-4" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            {secondaryActivities.map((a) => (<motion.div key={a.href} className="p-6 rounded-2xl bg-surface border border-border flex flex-col gap-3" variants={staggerItem} whileHover={cardHover}>
-              <h3 className="font-serif text-base">{a.name}</h3><p className="text-xs text-muted">{a.atmosphere}</p><p className="text-xs text-muted/70">{a.timing}</p>
-              <p className="text-xs text-[#FF8897]/70 italic flex-1">&ldquo;{a.haroldNote}&rdquo;</p>
-              <Link href={a.href} className="text-xs text-muted hover:text-foreground transition-colors mt-auto">View details &rarr;</Link>
-            </motion.div>))}
-          </motion.div>
-        </motion.section>
-
-        <motion.div className="flex flex-wrap justify-center gap-4" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <motion.div className="flex flex-col items-center gap-1 px-5 py-3 rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06]" variants={statPillVariants}><span className="text-lg font-semibold">Day 3</span><span className="text-xs text-muted/60">Current Streak</span></motion.div>
-          <motion.div className="flex flex-col items-center gap-1 px-5 py-3 rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06]" variants={statPillVariants}><span className="text-lg font-semibold">2</span><span className="text-xs text-muted/60">Activities This Month</span></motion.div>
-          <motion.div className="flex flex-col items-center gap-1 px-5 py-3 rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06]" variants={statPillVariants}><div className="flex items-center gap-2"><span className={`w-2.5 h-2.5 rounded-full ${insight ? stateColor[insight.state] : stateColor.neutral}`} /><span className="text-lg font-semibold">{insight ? stateLabel[insight.state] : "Neutral"}</span></div><span className="text-xs text-muted/60">Current State</span></motion.div>
+        {/* Harold note speech bubble */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative rounded-2xl p-4 mx-3"
+          style={{
+            background: "rgba(255,255,255,0.9)",
+            border: "1px solid rgba(180,165,140,0.25)",
+            boxShadow: "0 8px 24px rgba(61,53,41,0.06)",
+          }}
+        >
+          <span
+            className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-1 block"
+            style={{ color: "var(--accent)" }}
+          >
+            Harold&rsquo;s note
+          </span>
+          <p className="text-sm" style={{ color: "#2C2418" }}>
+            &ldquo;{insight.haroldNote}&rdquo;
+          </p>
         </motion.div>
 
-        <footer className="pt-6 flex justify-center"><Link href="/settings" className="text-xs text-muted/40 hover:text-muted transition-colors flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>Settings</Link></footer>
+        {/* Feature activity */}
+        <AnchorCard />
+
+        {/* Activity grid */}
+        <section>
+          <h2
+            className="font-serif italic mb-3"
+            style={{
+              fontFamily: '"DM Serif Display", Georgia, serif',
+              fontStyle: "italic",
+              color: "#2C2418",
+              fontSize: "1.1rem",
+            }}
+          >
+            Workouts around you
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {activities.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/hub/activity/${a.slug}`}
+                className="choice-card"
+                style={{ aspectRatio: "1 / 1" }}
+              >
+                <Image
+                  src={a.image}
+                  alt={a.title}
+                  fill
+                  sizes="(max-width: 480px) 50vw, 200px"
+                  className="choice-card-img"
+                />
+                <div className="choice-card-overlay" />
+                <div className="absolute bottom-3 left-3 right-3 text-white">
+                  <div className="text-[10px] uppercase tracking-wide opacity-85">
+                    {a.tag}
+                  </div>
+                  <div className="text-sm font-semibold leading-tight mt-0.5">
+                    {a.title}
+                  </div>
+                  <div className="text-[10px] opacity-85 mt-0.5">{a.when}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="pt-2"
+          >
+            <Link
+              href="/check-in"
+              className="flex items-center justify-center gap-2 w-full py-4 rounded-full font-semibold text-sm"
+              style={{
+                background: "#3D3529",
+                color: "#F5F0E8",
+                boxShadow: "0 14px 40px rgba(61,53,41,0.3)",
+              }}
+            >
+              Suggest workouts for today
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       </main>
     </div>
+  );
+}
+
+function AnchorCard() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
+      className="overflow-hidden rounded-3xl relative"
+      style={{ boxShadow: "0 14px 34px rgba(61,53,41,0.15)" }}
+    >
+      <div className="relative w-full aspect-[5/3]">
+        <Image
+          src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80"
+          alt="Sunday morning run club"
+          fill
+          sizes="(max-width: 480px) 100vw, 430px"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute top-3 left-3 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
+          <span className="text-[10px] uppercase tracking-wider text-white/90 font-semibold">
+            All levels welcome
+          </span>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <span className="text-[10px] uppercase tracking-wide opacity-90">
+            Run Club
+          </span>
+          <h3
+            className="font-serif italic text-xl leading-tight"
+            style={{
+              fontFamily: '"DM Serif Display", Georgia, serif',
+              fontStyle: "italic",
+            }}
+          >
+            Saturday Morning Run
+          </h3>
+          <p className="text-xs opacity-90 mt-0.5">
+            Sat · 8:30 AM · Prospect Heights
+          </p>
+        </div>
+      </div>
+      <div
+        className="p-4"
+        style={{ background: "rgba(255,252,246,0.95)" }}
+      >
+        <p className="text-sm" style={{ color: "var(--muted)" }}>
+          Light. Social routes like these tend to help right now. Don&rsquo;t
+          stress if you&rsquo;re rusty — nobody else isn&rsquo;t either.
+        </p>
+        <Link
+          href="/hub/activity/sunday-run"
+          className="inline-flex items-center gap-1 text-xs font-semibold mt-2"
+          style={{ color: "var(--accent)" }}
+        >
+          I&rsquo;m interested →
+        </Link>
+      </div>
+    </motion.div>
   );
 }

@@ -4,10 +4,11 @@ import ViewModeProvider from "@/components/ViewModeProvider";
 
 export const metadata: Metadata = {
   title: "Harold & Crew — Regain Your Rhythm",
-  description: "A companion who helps you understand your patterns, connect with your community, and restore balance to your life.",
+  description:
+    "A companion who helps you understand your patterns, connect with your community, and restore balance to your life.",
   icons: {
-    icon: "/Attune_Logo_White_png.png",
-    apple: "/Attune_Logo_White_png.png",
+    icon: "/harold-mascot.png",
+    apple: "/harold-mascot.png",
   },
   other: {
     "mobile-web-app-capable": "yes",
@@ -23,10 +24,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="h-full flex items-center justify-center bg-[#050507]">
+      <body className="h-full flex items-center justify-center">
         <ViewModeProvider>{children}</ViewModeProvider>
       </body>
     </html>

@@ -1,622 +1,156 @@
 "use client";
 
-import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import HaroldMascot from "@/components/HaroldMascot";
+import { motion } from "framer-motion";
 
-/* \u2500\u2500\u2500 Data \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-
-const team = [
-  {
-    name: "Andy Igwe",
-    role: "Founder & Researcher",
-    bio: "Focused on creating experiences that feel human-first, not tech-first.",
-    photo: "/Andy.png",
-  },
-  {
-    name: "Mariana Alonso",
-    role: "Founder & Designer",
-    bio: "Bridging the gap between behavioral psychology and everyday digital experiences.",
-    photo: "/Mariana.png",
-  },
-  {
-    name: "Neel Pendse",
-    role: "Founder, Designer & Researcher",
-    bio: "Driven by the belief that great engineering can make complex things feel effortless.",
-    photo: "/Neel.png",
-  },
-  {
-    name: "Nikhil Khanal",
-    role: "Founder, Designer & Developer",
-    bio: "Passionate about building technology that meets people where they are, not where they should be.",
-    photo: "/Nikhil.jpg",
-  },
-];
-
-const steps = [
-  {
-    n: "01",
-    title: "Observe",
-    desc: "Harold quietly observes patterns from your health data and daily rhythms. No dashboards, no metrics\u2014just understanding in the background.",
-  },
-  {
-    n: "02",
-    title: "Reflect",
-    desc: "Harold translates patterns into simple, human-readable reflections. You see how you\u2019re doing through motion and animation\u2014immediately felt, not analyzed.",
-  },
-  {
-    n: "03",
-    title: "Connect",
-    desc: "Harold presents 2\u20134 real-world group activities that fit your current state. Run clubs, walks, recreational sports\u2014real communities, not digital ones.",
-  },
-];
-
-const stats = [
-  { value: "2-4x", label: "Weekly app visits" },
-  { value: "3-4", label: "Activities per month" },
-  { value: "Zero", label: "Dashboards or charts" },
-];
-
-/* \u2500\u2500\u2500 Helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-
-function AnimatedSection({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/* \u2500\u2500\u2500 Page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-
+/**
+ * Landing page — mirrors the Harold & Crew splash design:
+ * full-bleed meadow hero with serif italic copy, subtle crew lockup
+ * in the corner, and a warm dark pill CTA anchored at the bottom.
+ */
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
-
-  const videoRef = useRef<HTMLDivElement>(null);
-  const videoInView = useInView(videoRef, { once: true, margin: "-100px" });
-
-  const aboutRef = useRef<HTMLDivElement>(null);
-  const aboutInView = useInView(aboutRef, { once: true, margin: "-100px" });
-
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      localStorage.setItem("haroldcrew_waitlist_email", email);
-      setSubmitted(true);
-      setEmail("");
-    }
-  };
-
-  const currentYear = new Date().getFullYear();
-
-  const headlineWords = ["Regain", "your", "rhythm"];
-
   return (
-    <div className="min-h-full bg-background">
-      <Navbar />
+    <div className="relative min-h-full w-full overflow-hidden">
+      {/* Full-bleed background photo */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1501696461415-6bd6660c6742?auto=format&fit=crop&w=1400&q=80"
+          alt="Friends walking through a meadow at sunset"
+          fill
+          priority
+          sizes="(max-width: 480px) 100vw, 430px"
+          className="object-cover"
+        />
+        {/* Top gradient for readability */}
+        <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/50 via-black/20 to-transparent" />
+        {/* Warm bottom gradient — cream → peach → brown */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(217,178,125,0.35) 40%, rgba(139,111,71,0.85) 75%, #5C4F3D 100%)",
+          }}
+        />
+      </div>
 
-      {/* \u2500\u2500 1. HERO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <motion.section
-        ref={heroRef}
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="min-h-[100vh] flex flex-col items-center justify-center px-6 pt-16 relative overflow-hidden"
-      >
-        {/* Radial glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full blur-[180px]"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.05) 40%, transparent 70%)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
-          {/* Harold mascot */}
-          <div className="mb-6">
-            <HaroldMascot size={160} />
-          </div>
-
-          {/* Logo text */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-serif text-2xl tracking-tight mb-8"
-          >
-            Harold &amp; Crew
-          </motion.p>
-
-          {/* Headline \u2014 staggered word reveal */}
-          <h1 className="font-serif text-5xl sm:text-7xl leading-[1.05] tracking-tight mb-6 flex flex-wrap justify-center gap-x-4">
-            {headlineWords.map((word, i) => (
-              <motion.span
-                key={word}
-                initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.5 + i * 0.15,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          {/* Subtext */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.1, ease: "easeOut" }}
-            className="text-base text-muted max-w-lg mx-auto leading-relaxed mb-10"
-          >
-            A companion who helps you understand your patterns, connect with
-            your community, and restore balance to your life.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.4 }}
-            className="flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/onboarding"
-                className="inline-block px-7 py-3 rounded-full text-sm font-semibold bg-gradient-primary text-white shadow-lg shadow-accent/20 transition-all"
-              >
-                Meet Harold
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="#how-it-works"
-                className="inline-block px-7 py-3 rounded-full border border-white/10 text-sm font-medium hover:bg-white/[0.03] transition-all"
-              >
-                How It Works
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Scroll indicator */}
+      {/* Crew lockup — top-left */}
+      <div className="relative z-10 flex items-center gap-2 px-6 pt-16">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex items-center -space-x-2"
         >
-          <motion.svg
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-muted/40"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </motion.svg>
+          <Image
+            src="/harold-mascot.png"
+            alt="Harold"
+            width={34}
+            height={34}
+            className="rounded-full border-2 border-white/40 shadow-md"
+          />
+          <Image
+            src="/Andy.png"
+            alt="Andy"
+            width={30}
+            height={30}
+            className="rounded-full border-2 border-white/40 shadow-md object-cover"
+          />
+          <Image
+            src="/Mariana.png"
+            alt="Mariana"
+            width={30}
+            height={30}
+            className="rounded-full border-2 border-white/40 shadow-md object-cover"
+          />
         </motion.div>
-      </motion.section>
+      </div>
 
-      {/* \u2500\u2500 2. VIDEO SECTION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section className="py-24 px-6 border-t border-white/[0.04]" ref={videoRef}>
-        <div className="max-w-4xl mx-auto">
-          <AnimatedSection className="text-center mb-8">
-            <p className="text-xs uppercase tracking-wider text-muted/50 mb-3">
-              See Harold in action
-            </p>
-          </AnimatedSection>
-
-          <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.96 }}
-            animate={
-              videoInView
-                ? { opacity: 1, y: 0, scale: 1 }
-                : { opacity: 0, y: 60, scale: 0.96 }
-            }
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative aspect-video rounded-2xl bg-surface border border-border overflow-hidden flex items-center justify-center group cursor-pointer"
+      {/* Content wrapper */}
+      <div className="relative z-10 flex flex-col min-h-[calc(100vh-80px)] px-6 pt-6 pb-10">
+        {/* Top headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <h1
+            className="font-serif italic text-white leading-[1.1] drop-shadow-lg"
+            style={{
+              fontFamily: '"DM Serif Display", Georgia, serif',
+              fontSize: "clamp(1.9rem, 7.5vw, 3rem)",
+            }}
           >
-            {/* Play button */}
-            <motion.div
-              whileHover={{ scale: 1.12 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="flex flex-col items-center gap-4"
+            Hey there,
+            <br />
+            We&rsquo;re Harold &amp; Crew
+          </h1>
+        </motion.div>
+
+        <div className="flex-1" />
+
+        {/* Bottom headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          className="mb-6"
+        >
+          <h2
+            className="font-serif italic text-white leading-[1.1] drop-shadow-lg"
+            style={{
+              fontFamily: '"DM Serif Display", Georgia, serif',
+              fontSize: "clamp(1.7rem, 6.5vw, 2.5rem)",
+            }}
+          >
+            Let&rsquo;s get to know
+            <br />
+            each other!
+          </h2>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
+          <Link
+            href="/onboarding"
+            className="flex items-center justify-center gap-2 w-full px-8 py-4 rounded-full font-semibold text-base shadow-xl"
+            style={{
+              background: "#3D3529",
+              color: "#F5F0E8",
+              boxShadow: "0 14px 40px rgba(61,53,41,0.45)",
+            }}
+          >
+            Let&rsquo;s Go!
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <div
-                className="w-20 h-20 rounded-full flex items-center justify-center transition-shadow duration-300 group-hover:shadow-[0_0_40px_rgba(139,92,246,0.25)]"
-                style={{ background: "rgba(139,92,246,0.12)" }}
-              >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="#8B5CF6"
-                  className="ml-1"
-                >
-                  <polygon points="5,3 19,12 5,21" />
-                </svg>
-              </div>
-              <span className="text-sm text-muted/50">Coming Soon</span>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
 
-      {/* \u2500\u2500 3. ABOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section
-        id="about"
-        className="py-24 px-6 border-t border-white/[0.04]"
-        ref={aboutRef}
-      >
-        <div className="max-w-2xl mx-auto">
-          <AnimatedSection>
-            <p className="text-xs uppercase tracking-wider text-muted/50 mb-6">
-              About Harold &amp; Crew
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <h2 className="font-serif text-3xl sm:text-4xl leading-[1.15] mb-8">
-              {aboutInView && (
-                <>
-                  {["Understanding", "patterns,", "not", "tracking", "metrics"].map(
-                    (word, i) => (
-                      <motion.span
-                        key={word}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          delay: 0.15 + i * 0.08,
-                          ease: [0.25, 0.46, 0.45, 0.94],
-                        }}
-                        className="inline-block mr-[0.3em]"
-                      >
-                        {word}
-                      </motion.span>
-                    )
-                  )}
-                </>
-              )}
-            </h2>
-          </AnimatedSection>
-
-          <div className="space-y-5 text-muted leading-relaxed">
-            <AnimatedSection delay={0.3}>
-              <p>
-                Modern life has become increasingly unstructured. Many people
-                have access to health data but no meaningful way to interpret it.
-                Simultaneously, they&apos;ve lost regular, shared physical
-                activity&mdash;the very thing that creates rhythm, consistency,
-                and connection.
-              </p>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.45}>
-              <p>
-                Harold &amp; Crew exists to help you regain that rhythm. Through
-                a calm, character-led interface, Harold observes your patterns,
-                translates them into simple reflections, and connects you to
-                real-world group activities that fit your current state.
-              </p>
-            </AnimatedSection>
-
-            <motion.blockquote
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                duration: 0.8,
-                delay: 0.2,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className="text-foreground/80 font-serif text-xl leading-relaxed pl-5 border-l-2 border-harold/30 my-8"
-            >
-              Behavior change is not driven by instruction, but by perception.
-            </motion.blockquote>
+          <div className="flex items-center justify-center gap-4 mt-5 text-xs text-white/80">
+            <Link href="/auth" className="hover:text-white transition-colors">
+              I already have an account
+            </Link>
+            <span className="opacity-50">·</span>
+            <Link href="/#about" className="hover:text-white transition-colors">
+              Learn more
+            </Link>
           </div>
-        </div>
-      </section>
-
-      {/* \u2500\u2500 4. HOW IT WORKS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section
-        id="how-it-works"
-        className="py-24 px-6 border-t border-white/[0.04]"
-      >
-        <div className="max-w-4xl mx-auto">
-          <AnimatedSection>
-            <p className="text-xs uppercase tracking-wider text-muted/50 mb-3">
-              How It Works
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl mb-12">
-              Three simple steps to restored rhythm
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid sm:grid-cols-3 gap-4">
-            {steps.map((s, i) => (
-              <motion.div
-                key={s.n}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.12,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                whileHover={{
-                  y: -8,
-                  transition: { type: "spring", stiffness: 300 },
-                }}
-                className="relative p-6 rounded-2xl bg-surface border border-border overflow-hidden"
-              >
-                {/* Top accent line */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-[2px]"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, #8B5CF6 0%, rgba(59,130,246,0.3) 100%)",
-                  }}
-                />
-                <span className="text-xs font-mono text-muted/50">{s.n}</span>
-                <h3 className="text-sm font-medium mt-3 mb-2">{s.title}</h3>
-                <p className="text-sm text-muted/50 leading-relaxed">
-                  {s.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* \u2500\u2500 5. STATS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section className="py-24 px-6 border-t border-white/[0.04]">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid sm:grid-cols-3 gap-4">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 15,
-                }}
-                className="p-8 rounded-2xl bg-surface border border-border text-center"
-              >
-                <motion.p
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.2 + i * 0.1,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 12,
-                  }}
-                  className="font-serif text-4xl sm:text-5xl mb-2"
-                  style={{ color: "#8B5CF6" }}
-                >
-                  {stat.value}
-                </motion.p>
-                <p className="text-sm text-muted/50">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* \u2500\u2500 6. TEAM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section
-        id="team"
-        className="py-24 px-6 border-t border-white/[0.04]"
-      >
-        <div className="max-w-5xl mx-auto">
-          <AnimatedSection>
-            <p className="text-xs uppercase tracking-wider text-muted/50 mb-3">
-              The Team
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl mb-4">
-              Built by people who get it
-            </h2>
-            <p className="text-muted leading-relaxed mb-12 max-w-xl">
-              We&apos;ve all experienced identity drift &mdash; slowly becoming
-              someone we didn&apos;t fully recognize. Harold &amp; Crew is the
-              tool we wished existed.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {team.map((member, i) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.1,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
-                className="p-6 rounded-2xl bg-surface border border-border text-center"
-              >
-                <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-sm font-semibold mb-1">{member.name}</h3>
-                <p className="text-xs text-accent/60 mb-3">{member.role}</p>
-                <p className="text-xs text-muted/50 leading-relaxed">
-                  {member.bio}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* \u2500\u2500 7. SIGN UP / CTA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <section className="py-24 px-6 border-t border-white/[0.04]">
-        <div className="max-w-xl mx-auto text-center">
-          <AnimatedSection>
-            <h2 className="font-serif text-2xl sm:text-3xl mb-3">
-              Join the community
-            </h2>
-            <p className="text-sm text-muted mb-8 max-w-md mx-auto">
-              Be among the first to experience health awareness that actually
-              works. Sign up to get early access and updates.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.15}>
-            <AnimatePresence mode="wait">
-              {submitted ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4 }}
-                  className="py-4 px-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20"
-                >
-                  <p className="text-emerald-400 text-sm font-medium">
-                    You&apos;re on the list! We&apos;ll be in touch soon.
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  onSubmit={handleSignup}
-                  className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                >
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                    className="flex-1 px-4 py-3 rounded-xl bg-background border border-white/10 text-sm text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors"
-                  />
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-primary text-white shadow-lg shadow-accent/20 whitespace-nowrap transition-all"
-                  >
-                    Sign Up
-                  </motion.button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-
-            <p className="text-xs text-muted/30 mt-4">
-              No spam. Just awareness.
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* \u2500\u2500 FOOTER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
-      <footer className="border-t border-border py-12 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid sm:grid-cols-4 gap-8 mb-10">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Image src="/harold-mascot.png" alt="Harold" width={24} height={24} className="rounded-lg" />
-                <span className="text-sm font-bold">Harold &amp; Crew</span>
-              </div>
-              <p className="text-xs text-muted/40 leading-relaxed">A companion for regaining rhythm. Observe, reflect, connect.</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Product</p>
-              <div className="space-y-2">
-                <Link href="/onboarding" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Get Started</Link>
-                <Link href="/hub" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Harold</Link>
-                <Link href="/check-in" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Check-in</Link>
-                <Link href="/pricing" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Pricing</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Learn</p>
-              <div className="space-y-2">
-                <Link href="/#about" className="block text-sm text-muted/60 hover:text-foreground transition-colors">About</Link>
-                <Link href="/#how-it-works" className="block text-sm text-muted/60 hover:text-foreground transition-colors">How It Works</Link>
-                <Link href="/#team" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Team</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted/50 mb-3">Community</p>
-              <div className="space-y-2">
-                <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="block text-sm text-accent/70 hover:text-accent transition-colors font-medium">Join our Discord</a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Instagram</a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">Twitter / X</a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">LinkedIn</a>
-                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="block text-sm text-muted/60 hover:text-foreground transition-colors">TikTok</a>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border">
-            <span className="text-xs text-muted/30">&copy; {currentYear} Harold &amp; Crew. All rights reserved.</span>
-            <span className="text-xs text-muted/20">v1.0.0</span>
-          </div>
-        </div>
-      </footer>
+        </motion.div>
+      </div>
     </div>
   );
 }
