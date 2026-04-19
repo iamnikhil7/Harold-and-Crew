@@ -46,7 +46,7 @@ export default function PricingPage() {
           <motion.div animate={{ y: [0, -8, 0], rotate: [0, 3, -2, 0] }} transition={{ duration: 4, repeat: Infinity }} className="inline-block mb-6">
             <div className="relative">
               <div className="absolute inset-0 rounded-full blur-2xl bg-accent/20" />
-              <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} className="relative z-10 rounded-2xl rotate-3 shadow-xl shadow-accent/10" />
+              <Image src="/mascots/harold.png" alt="Harold" width={80} height={80} className="relative z-10 rounded-2xl rotate-3 shadow-xl shadow-accent/10" />
             </div>
           </motion.div>
           <h1 className="text-3xl sm:text-5xl font-bold mb-4">Plans that grow <span className="text-gradient">with you</span></h1>

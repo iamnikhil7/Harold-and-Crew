@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { archetypes, type Archetype } from "@/lib/archetypes";
 import PillButton from "@/components/PillButton";
+import MascotImage from "@/components/MascotImage";
+import { ARCHETYPE_LINEUP } from "@/lib/mascots";
 
 /** Poetic display names + taglines for each archetype reveal. */
 const DISPLAY: Record<number, { displayName: string; tagline: string }> = {
@@ -121,8 +123,8 @@ export default function ArchetypeRevealPage() {
             }}
           />
           <div className="relative flex items-end justify-center gap-1">
-            <Image
-              src="/harold-mascot.png"
+            <MascotImage
+              name={ARCHETYPE_LINEUP[0]}
               alt=""
               width={52}
               height={52}
@@ -136,8 +138,8 @@ export default function ArchetypeRevealPage() {
                 ease: "easeInOut",
               }}
             >
-              <Image
-                src="/harold-mascot.png"
+              <MascotImage
+                name={ARCHETYPE_LINEUP[1]}
                 alt="Harold"
                 width={108}
                 height={108}
@@ -147,8 +149,8 @@ export default function ArchetypeRevealPage() {
                 }}
               />
             </motion.div>
-            <Image
-              src="/harold-mascot.png"
+            <MascotImage
+              name={ARCHETYPE_LINEUP[2]}
               alt=""
               width={52}
               height={52}
@@ -211,7 +213,7 @@ export default function ArchetypeRevealPage() {
         >
           <div className="flex flex-col items-center gap-1">
             <Image
-              src="/harold-mascot.png"
+              src="/mascots/harold.png"
               alt="You're here"
               width={42}
               height={42}
@@ -234,7 +236,7 @@ export default function ArchetypeRevealPage() {
           />
           <div className="flex flex-col items-center gap-1">
             <Image
-              src="/harold-mascot.png"
+              src="/mascots/harold.png"
               alt="What awaits"
               width={42}
               height={42}

@@ -44,7 +44,7 @@ function IntroScreen({
         className="mb-6"
       >
         <Image
-          src="/harold-mascot.png"
+          src="/mascots/harold.png"
           alt="Harold"
           width={128}
           height={128}

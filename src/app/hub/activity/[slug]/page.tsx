@@ -63,7 +63,7 @@ export default function ActivityDetailPage() {
               {logisticsRows.map((row, i) => (<motion.div key={row.label} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.4 }}><p className="text-xs uppercase text-muted/50 mb-1">{row.label}</p><p className="text-sm text-foreground">{row.value}</p></motion.div>))}
             </motion.div>
             <section className="space-y-4">
-              <div className="flex items-center gap-3"><Image src="/harold-mascot.png" alt="Harold" width={32} height={32} className="rounded-full" /><h2 className="font-serif text-xl">Why this might fit right now</h2></div>
+              <div className="flex items-center gap-3"><Image src="/mascots/harold.png" alt="Harold" width={32} height={32} className="rounded-full" /><h2 className="font-serif text-xl">Why this might fit right now</h2></div>
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}><p className="text-muted leading-relaxed border-l-2 border-[#8B5CF6]/30 pl-4">{activity.haroldNote}</p></motion.div>
             </section>
             <section className="space-y-3">

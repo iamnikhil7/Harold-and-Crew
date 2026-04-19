@@ -20,7 +20,7 @@ export default function PhoneHeader({
     <div className="flex items-center justify-between px-5 pt-14 pb-3 flex-shrink-0">
       <Link href={href} className="flex items-center gap-2">
         <Image
-          src="/harold-mascot.png"
+          src="/mascots/harold.png"
           alt="Harold"
           width={28}
           height={28}

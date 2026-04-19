@@ -89,7 +89,7 @@ export default function ConnectAppsPage() {
         className="absolute top-20 right-0 z-0 pointer-events-none"
       >
         <Image
-          src="/harold-mascot.png"
+          src="/mascots/harold.png"
           alt=""
           width={90}
           height={90}
@@ -205,7 +205,7 @@ export default function ConnectAppsPage() {
         className="absolute bottom-28 left-0 z-0 pointer-events-none"
       >
         <Image
-          src="/harold-mascot.png"
+          src="/mascots/harold.png"
           alt=""
           width={58}
           height={58}

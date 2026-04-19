@@ -136,7 +136,7 @@ export default function HubPage() {
             className="mx-auto mb-3"
           >
             <Image
-              src="/harold-mascot.png"
+              src="/mascots/harold.png"
               alt="Harold"
               width={66}
               height={66}

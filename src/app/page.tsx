@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import MascotImage from "@/components/MascotImage";
+import { CREW_LINEUP } from "@/lib/mascots";
 
 /**
  * Harold & Crew landing — full-bleed meadow hero with serif italic
@@ -22,9 +24,7 @@ export default function Home() {
           sizes="(max-width: 480px) 100vw, 430px"
           className="object-cover"
         />
-        {/* Top scrim for readability */}
         <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-black/55 via-black/15 to-transparent" />
-        {/* Warm bottom wash — cream → peach → brown */}
         <div
           className="absolute inset-x-0 bottom-0 h-[55%]"
           style={{
@@ -34,7 +34,7 @@ export default function Home() {
         />
       </div>
 
-      {/* Crew lockup — top-left */}
+      {/* Crew lockup — reads from CREW_LINEUP in src/lib/mascots.ts */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,27 +42,16 @@ export default function Home() {
         className="relative z-10 flex items-center gap-0 px-5 pt-16"
       >
         <div className="flex items-center -space-x-2">
-          <Image
-            src="/harold-mascot.png"
-            alt="Harold"
-            width={34}
-            height={34}
-            className="rounded-full border-2 border-white/50 shadow-md"
-          />
-          <Image
-            src="/Andy.png"
-            alt="Andy"
-            width={30}
-            height={30}
-            className="rounded-full border-2 border-white/50 shadow-md object-cover"
-          />
-          <Image
-            src="/Mariana.png"
-            alt="Mariana"
-            width={30}
-            height={30}
-            className="rounded-full border-2 border-white/50 shadow-md object-cover"
-          />
+          {CREW_LINEUP.map((name, i) => (
+            <MascotImage
+              key={name}
+              name={name}
+              alt={name}
+              width={i === 1 ? 36 : 30}
+              height={i === 1 ? 36 : 30}
+              className="rounded-full border-2 border-white/50 shadow-md object-cover"
+            />
+          ))}
         </div>
       </motion.div>
 

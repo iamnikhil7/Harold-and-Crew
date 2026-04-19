@@ -28,7 +28,7 @@ export default function HaroldMascot({ size = 120, animate = true, glow = true, 
       )}
       {/* Mascot image */}
       <Image
-        src="/harold-mascot.png"
+        src="/mascots/harold.png"
         alt="Harold"
         width={size}
         height={size}

@@ -178,7 +178,7 @@ export default function CheckInPage() {
             <motion.div key="s1" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-10">
               <div className="text-center">
                 <motion.div animate={{ y: [0, -8, 0], rotate: [0, 3, -2, 0] }} transition={{ duration: 4, repeat: Infinity }} className="inline-block mb-4">
-                  <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} className="drop-shadow-[0_0_20px_rgba(139,92,246,0.3)]" />
+                  <Image src="/mascots/harold.png" alt="Harold" width={80} height={80} className="drop-shadow-[0_0_20px_rgba(139,92,246,0.3)]" />
                 </motion.div>
                 <h1 className="text-2xl font-bold mb-2">How are you today?</h1>
                 <p className="text-sm text-muted/60">Quick check-in. Takes 30 seconds.</p>
@@ -305,7 +305,7 @@ export default function CheckInPage() {
             <motion.div key="s4" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-8 text-center pt-8">
               <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 12 }}>
                 <motion.div animate={{ y: [0, -10, 0], rotate: [0, 3, -2, 0] }} transition={{ duration: 3, repeat: Infinity }} className="inline-block">
-                  <Image src="/harold-mascot.png" alt="Harold" width={100} height={100} className="drop-shadow-[0_0_30px_rgba(139,92,246,0.4)]" />
+                  <Image src="/mascots/harold.png" alt="Harold" width={100} height={100} className="drop-shadow-[0_0_30px_rgba(139,92,246,0.4)]" />
                 </motion.div>
               </motion.div>
 

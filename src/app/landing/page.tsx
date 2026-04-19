@@ -118,7 +118,7 @@ export default function LandingPage() {
       >
         <div className="flex items-center gap-2.5">
           <Image
-            src="/harold-mascot.png"
+            src="/mascots/harold.png"
             alt="Harold"
             width={36}
             height={36}
@@ -158,7 +158,7 @@ export default function LandingPage() {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               <Image
-                src="/harold-mascot.png"
+                src="/mascots/harold.png"
                 alt="Harold — your wellness companion"
                 width={180}
                 height={180}
@@ -462,7 +462,7 @@ export default function LandingPage() {
                 className="flex flex-col items-center -mt-2"
               >
                 <Image
-                  src="/harold-mascot.png"
+                  src="/mascots/harold.png"
                   alt="Harold"
                   width={56}
                   height={56}
@@ -662,7 +662,7 @@ export default function LandingPage() {
               className="mb-4"
             >
               <Image
-                src="/harold-mascot.png"
+                src="/mascots/harold.png"
                 alt="Harold"
                 width={64}
                 height={64}
@@ -750,7 +750,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Image
-              src="/harold-mascot.png"
+              src="/mascots/harold.png"
               alt="Harold"
               width={24}
               height={24}

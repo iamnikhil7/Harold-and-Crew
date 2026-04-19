@@ -77,7 +77,7 @@ export default function HealthConnectPage() {
             <motion.div key="step-1" initial={stepTransition.initial} animate={stepTransition.animate} exit={stepTransition.exit} transition={stepTransition.transition}>
               <div className="text-center mb-8">
                 <motion.div className="inline-block mb-4" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
-                  <Image src="/harold-mascot.png" alt="Harold mascot" width={80} height={80} className="mx-auto" />
+                  <Image src="/mascots/harold.png" alt="Harold mascot" width={80} height={80} className="mx-auto" />
                 </motion.div>
                 <h1 className="font-serif text-3xl mb-3">Connect Your Health Data</h1>
                 <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto">Harold can observe patterns from your health data&mdash;sleep, recovery, activity&mdash;and help you understand what they mean.</p>
@@ -134,7 +134,7 @@ export default function HealthConnectPage() {
                 <>
                   <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 15 }} className="mb-6">
                     <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 0.6, repeat: 2, ease: "easeOut" }}>
-                      <Image src="/harold-mascot.png" alt="Harold celebrating" width={80} height={80} className="mx-auto" />
+                      <Image src="/mascots/harold.png" alt="Harold celebrating" width={80} height={80} className="mx-auto" />
                     </motion.div>
                   </motion.div>
                   <h2 className="font-serif text-2xl mb-3">You&apos;re all set!</h2>
@@ -152,7 +152,7 @@ export default function HealthConnectPage() {
               ) : (
                 <>
                   <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 15 }} className="mb-6">
-                    <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} className="mx-auto opacity-80" />
+                    <Image src="/mascots/harold.png" alt="Harold" width={80} height={80} className="mx-auto opacity-80" />
                   </motion.div>
                   <h2 className="font-serif text-2xl mb-3">No worries!</h2>
                   <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto mb-8">You can connect your health data anytime from Settings. Harold will still suggest activities based on your preferences.</p>

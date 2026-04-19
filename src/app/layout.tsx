@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   description:
     "A companion who helps you understand your patterns, connect with your community, and restore balance to your life.",
   icons: {
-    icon: "/harold-mascot.png",
-    apple: "/harold-mascot.png",
+    icon: "/mascots/harold.png",
+    apple: "/mascots/harold.png",
   },
   other: {
     "mobile-web-app-capable": "yes",

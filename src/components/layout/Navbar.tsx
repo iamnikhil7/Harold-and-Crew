@@ -56,7 +56,7 @@ export default function Navbar() {
           className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
         >
           <Image
-            src="/harold-mascot.png"
+            src="/mascots/harold.png"
             alt="Harold"
             width={32}
             height={32}
