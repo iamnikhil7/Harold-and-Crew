@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { archetypes, type Archetype } from "@/lib/archetypes";
+import PillButton from "@/components/PillButton";
 
-/** Short, poetic archetype names and taglines for the reveal. */
+/** Poetic display names + taglines for each archetype reveal. */
 const DISPLAY: Record<number, { displayName: string; tagline: string }> = {
   1: {
     displayName: "The Burnt-Out Professional",
@@ -92,11 +92,11 @@ export default function ArchetypeRevealPage() {
       className="relative min-h-full flex flex-col"
       style={{
         background:
-          "radial-gradient(120% 80% at 50% 15%, #E3ECF5 0%, #F5F0E8 55%, #F2ECE4 100%)",
+          "radial-gradient(130% 80% at 50% 12%, #DEE9F4 0%, #F2ECE4 55%, #EFE6D7 100%)",
       }}
     >
-      {/* Header */}
-      <div className="flex items-center justify-center pt-14 pb-2 relative z-10">
+      {/* Top label */}
+      <div className="flex items-center justify-center pt-14 pb-2">
         <span
           className="text-xs tracking-[0.2em] uppercase"
           style={{ color: "var(--muted-soft)" }}
@@ -105,43 +105,53 @@ export default function ArchetypeRevealPage() {
         </span>
       </div>
 
-      <div className="flex-1 px-6 py-4 flex flex-col items-center">
-        {/* Crew illustration — Harold with crew around */}
+      <div className="flex-1 px-5 py-3 flex flex-col items-center">
+        {/* Crew lockup */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative mb-6"
+          className="relative mb-5"
         >
-          <div className="absolute inset-0 blur-2xl rounded-full opacity-60"
-            style={{ background: "radial-gradient(circle, rgba(179,200,230,0.45), transparent 70%)" }}
+          <div
+            className="absolute inset-0 blur-2xl rounded-full opacity-70"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(179,200,230,0.45), transparent 70%)",
+            }}
           />
           <div className="relative flex items-end justify-center gap-1">
             <Image
               src="/harold-mascot.png"
-              alt="Crew member"
-              width={54}
-              height={54}
+              alt=""
+              width={52}
+              height={52}
               className="rounded-[30%] -rotate-6 opacity-90"
             />
             <motion.div
               animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
               <Image
                 src="/harold-mascot.png"
                 alt="Harold"
-                width={110}
-                height={110}
+                width={108}
+                height={108}
                 className="rounded-[30%]"
-                style={{ filter: "drop-shadow(0 16px 32px rgba(100,80,60,0.2))" }}
+                style={{
+                  filter: "drop-shadow(0 16px 32px rgba(100,80,60,0.25))",
+                }}
               />
             </motion.div>
             <Image
               src="/harold-mascot.png"
-              alt="Crew member"
-              width={54}
-              height={54}
+              alt=""
+              width={52}
+              height={52}
               className="rounded-[30%] rotate-6 opacity-90"
             />
           </div>
@@ -149,15 +159,15 @@ export default function ArchetypeRevealPage() {
 
         {/* Name */}
         <motion.h1
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="font-serif italic text-center mb-4"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-center mb-4"
           style={{
             fontFamily: '"DM Serif Display", Georgia, serif',
             fontStyle: "italic",
             color: "#2C2418",
-            fontSize: "clamp(1.6rem, 6vw, 2.2rem)",
+            fontSize: "clamp(1.6rem, 6vw, 2.1rem)",
           }}
         >
           {display.displayName}
@@ -165,32 +175,38 @@ export default function ArchetypeRevealPage() {
 
         {/* Description card */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="w-full rounded-2xl p-5 mb-5"
           style={{
-            background: "rgba(255,255,255,0.75)",
+            background: "rgba(255,255,255,0.85)",
             border: "1px solid rgba(180,165,140,0.25)",
             boxShadow: "0 6px 24px rgba(61,53,41,0.08)",
           }}
         >
-          <p className="text-sm leading-relaxed" style={{ color: "#2C2418" }}>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: "#2C2418" }}
+          >
             <span className="mr-1">⚡</span>
             {display.tagline}
           </p>
-          <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--muted)" }}>
+          <p
+            className="text-sm leading-relaxed mt-3"
+            style={{ color: "var(--muted)" }}
+          >
             <span className="mr-1">🧡</span>
             Harold &amp; Crew will help you slow down just enough to notice what
             your body &amp; mind are telling you.
           </p>
         </motion.div>
 
-        {/* Journey: you're here → what awaits */}
+        {/* Journey */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
           className="w-full flex items-center gap-2 mb-8 px-2"
         >
           <div className="flex flex-col items-center gap-1">
@@ -202,7 +218,10 @@ export default function ArchetypeRevealPage() {
               className="rounded-[30%]"
               style={{ filter: "grayscale(30%) brightness(0.95)" }}
             />
-            <span className="text-[10px]" style={{ color: "var(--muted-soft)" }}>
+            <span
+              className="text-[10px]"
+              style={{ color: "var(--muted-soft)" }}
+            >
               You&rsquo;re here
             </span>
           </div>
@@ -210,7 +229,7 @@ export default function ArchetypeRevealPage() {
             className="flex-1 h-[2px] rounded-full"
             style={{
               background:
-                "repeating-linear-gradient(90deg, rgba(139,111,71,0.5) 0 4px, transparent 4px 10px)",
+                "repeating-linear-gradient(90deg, rgba(139,111,71,0.55) 0 4px, transparent 4px 10px)",
             }}
           />
           <div className="flex flex-col items-center gap-1">
@@ -220,7 +239,9 @@ export default function ArchetypeRevealPage() {
               width={42}
               height={42}
               className="rounded-[30%]"
-              style={{ filter: "drop-shadow(0 6px 14px rgba(100,80,60,0.2))" }}
+              style={{
+                filter: "drop-shadow(0 6px 14px rgba(100,80,60,0.25))",
+              }}
             />
             <span className="text-[10px]" style={{ color: "var(--accent)" }}>
               What awaits
@@ -230,15 +251,15 @@ export default function ArchetypeRevealPage() {
 
         {/* Prompt */}
         <motion.p
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="font-serif italic text-center mb-5"
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="text-center mb-5"
           style={{
             fontFamily: '"DM Serif Display", Georgia, serif',
             fontStyle: "italic",
             color: "#5C4F3D",
-            fontSize: "clamp(1.1rem, 4.4vw, 1.4rem)",
+            fontSize: "clamp(1.05rem, 4.2vw, 1.3rem)",
             lineHeight: 1.3,
           }}
         >
@@ -249,35 +270,12 @@ export default function ArchetypeRevealPage() {
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
           className="w-full mt-auto"
         >
-          <Link
-            href="/hub"
-            className="flex items-center justify-center gap-2 w-full py-4 rounded-full font-semibold text-sm"
-            style={{
-              background: "#3D3529",
-              color: "#F5F0E8",
-              boxShadow: "0 14px 40px rgba(61,53,41,0.3)",
-            }}
-          >
-            Let&rsquo;s find out
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </Link>
+          <PillButton href="/hub">Let&rsquo;s find out</PillButton>
         </motion.div>
       </div>
 

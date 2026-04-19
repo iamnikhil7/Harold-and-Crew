@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import PillButton from "@/components/PillButton";
 import type { Question } from "@/lib/questions";
 
 interface Props {
@@ -23,23 +24,20 @@ export default function QuestionCard({
   value,
   onChange,
   onNext,
-  onBack,
-  isFirst,
+  isFirst: _isFirst,
   isLast,
   currentIndex,
   totalQuestions,
 }: Props) {
-  const [animating, setAnimating] = useState(false);
+  void _isFirst;
   const [somethingElse, setSomethingElse] = useState("");
   const questionText = sensitivityMode ? question.sensitiveText : question.text;
   const isGrid = question.cardLayout === "grid";
   const isList = question.cardLayout === "list";
+  const isMultiSelect = question.type === "multi_select";
 
   useEffect(() => {
-    setAnimating(true);
     setSomethingElse("");
-    const t = setTimeout(() => setAnimating(false), 30);
-    return () => clearTimeout(t);
   }, [question.id]);
 
   const isValid = () => {
@@ -50,48 +48,42 @@ export default function QuestionCard({
     return value !== null && value !== undefined;
   };
 
-  const commitSomethingElse = () => {
-    if (somethingElse.trim()) onChange(`custom:${somethingElse.trim()}`);
-  };
-
   const handleSelect = (val: string) => {
-    if (question.type === "multi_select") {
+    if (isMultiSelect) {
       const current = Array.isArray(value) ? value : [];
-      const already = current.includes(val);
-      onChange(already ? current.filter((v) => v !== val) : [...current, val]);
+      onChange(
+        current.includes(val)
+          ? current.filter((v) => v !== val)
+          : [...current, val],
+      );
       return;
     }
     onChange(val);
   };
 
   const handleNext = () => {
-    if (somethingElse.trim()) commitSomethingElse();
+    if (somethingElse.trim()) onChange(`custom:${somethingElse.trim()}`);
     onNext();
   };
 
-  const isMultiSelect = question.type === "multi_select";
-
   return (
-    <div
-      className={`w-full max-w-md mx-auto px-5 pb-6 transition-all duration-300 ${
-        animating ? "opacity-0 translate-y-1" : "opacity-100 translate-y-0"
-      }`}
-    >
-      {/* Progress counter */}
-      <div className="mb-3">
-        <span className="text-xs font-medium" style={{ color: "var(--muted-soft)" }}>
-          {currentIndex + 1}/{totalQuestions}
-        </span>
-      </div>
+    <div className="w-full max-w-md mx-auto px-5 pb-6">
+      {/* Counter */}
+      <p
+        className="text-xs font-medium mb-2"
+        style={{ color: "var(--muted-soft)" }}
+      >
+        {currentIndex + 1}/{totalQuestions}
+      </p>
 
       {/* Question */}
       <h2
-        className="font-serif italic leading-[1.15] mb-5"
+        className="leading-[1.15] mb-5"
         style={{
           fontFamily: '"DM Serif Display", Georgia, serif',
           fontStyle: "italic",
           color: "#2C2418",
-          fontSize: "clamp(1.5rem, 6vw, 1.9rem)",
+          fontSize: "clamp(1.55rem, 6vw, 1.95rem)",
         }}
       >
         {questionText}
@@ -99,14 +91,18 @@ export default function QuestionCard({
 
       {question.hint && (
         <p
-          className="text-sm italic mb-5"
-          style={{ color: "var(--muted-soft)" }}
+          className="text-sm italic mb-4 -mt-2"
+          style={{
+            color: "var(--muted-soft)",
+            fontFamily: '"DM Serif Display", Georgia, serif',
+            fontStyle: "italic",
+          }}
         >
           {question.hint}
         </p>
       )}
 
-      {/* IMAGE GRID (single choice with images) */}
+      {/* Image grid */}
       {question.type === "single_choice" && question.options && isGrid && (
         <div className="grid grid-cols-2 gap-3 mb-4">
           {question.options.map((option) => {
@@ -143,7 +139,7 @@ export default function QuestionCard({
         </div>
       )}
 
-      {/* MULTI-SELECT / TEXT LIST (no images) */}
+      {/* Text list (multi-select or single-choice list) */}
       {(isMultiSelect || (question.type === "single_choice" && isList)) &&
         question.options && (
           <div className="grid grid-cols-2 gap-2.5 mb-4">
@@ -165,7 +161,7 @@ export default function QuestionCard({
           </div>
         )}
 
-      {/* SLIDER */}
+      {/* Slider */}
       {question.type === "slider" && (
         <div className="pt-4 pb-2 mb-4">
           <div className="relative mb-6">
@@ -186,10 +182,11 @@ export default function QuestionCard({
               }}
             />
             <div
-              className="absolute -top-8 transform -translate-x-1/2 font-serif text-2xl tabular-nums"
+              className="absolute -top-8 transform -translate-x-1/2 text-2xl tabular-nums"
               style={{
                 left: `${typeof value === "number" ? value : 50}%`,
                 color: "var(--accent-deep)",
+                fontFamily: '"DM Serif Display", Georgia, serif',
               }}
             >
               {typeof value === "number" ? value : 50}
@@ -205,62 +202,25 @@ export default function QuestionCard({
         </div>
       )}
 
-      {/* "Something else" free-text input — only for choice questions */}
+      {/* Something else? */}
       {question.type !== "slider" && (
         <input
           type="text"
           value={somethingElse}
           onChange={(e) => setSomethingElse(e.target.value)}
           placeholder="Something else?"
-          className="w-full px-4 py-3.5 mb-4 rounded-xl text-sm transition-colors"
+          className="w-full px-4 py-3.5 mb-4 rounded-2xl text-sm"
           style={{
-            background: "rgba(255,255,255,0.85)",
+            background: "rgba(255,255,255,0.9)",
             border: "1px solid rgba(180,165,140,0.3)",
             color: "var(--foreground)",
           }}
         />
       )}
 
-      {/* Navigation */}
-      <div className="flex items-center gap-3">
-        {!isFirst && (
-          <button
-            onClick={onBack}
-            className="px-4 py-3 rounded-full text-sm transition-colors"
-            style={{ color: "var(--muted-soft)" }}
-          >
-            Back
-          </button>
-        )}
-        <button
-          onClick={handleNext}
-          disabled={!isValid()}
-          className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full text-sm font-semibold transition-all"
-          style={{
-            background: isValid() ? "#3D3529" : "rgba(61,53,41,0.3)",
-            color: "#F5F0E8",
-            boxShadow: isValid()
-              ? "0 10px 28px rgba(61,53,41,0.22)"
-              : "none",
-            cursor: isValid() ? "pointer" : "not-allowed",
-          }}
-        >
-          {isLast ? "Reveal Identity" : "Next"}
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
-        </button>
-      </div>
+      <PillButton onClick={handleNext} disabled={!isValid()}>
+        {isLast ? "Reveal Identity" : "Next"}
+      </PillButton>
     </div>
   );
 }

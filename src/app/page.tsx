@@ -5,14 +5,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 /**
- * Landing page — mirrors the Harold & Crew splash design:
- * full-bleed meadow hero with serif italic copy, subtle crew lockup
- * in the corner, and a warm dark pill CTA anchored at the bottom.
+ * Harold & Crew landing — full-bleed meadow hero with serif italic
+ * headlines top and bottom, a small crew lockup in the corner, and
+ * a chocolate pill CTA anchored against a warm gradient wash.
  */
 export default function Home() {
   return (
     <div className="relative min-h-full w-full overflow-hidden">
-      {/* Full-bleed background photo */}
+      {/* Background photo */}
       <div className="absolute inset-0 z-0">
         <Image
           src="https://images.unsplash.com/photo-1501696461415-6bd6660c6742?auto=format&fit=crop&w=1400&q=80"
@@ -22,63 +22,68 @@ export default function Home() {
           sizes="(max-width: 480px) 100vw, 430px"
           className="object-cover"
         />
-        {/* Top gradient for readability */}
-        <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/50 via-black/20 to-transparent" />
-        {/* Warm bottom gradient — cream → peach → brown */}
+        {/* Top scrim for readability */}
+        <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-black/55 via-black/15 to-transparent" />
+        {/* Warm bottom wash — cream → peach → brown */}
         <div
-          className="absolute inset-x-0 bottom-0 h-1/2"
+          className="absolute inset-x-0 bottom-0 h-[55%]"
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(217,178,125,0.35) 40%, rgba(139,111,71,0.85) 75%, #5C4F3D 100%)",
+              "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(217,178,125,0.35) 38%, rgba(139,111,71,0.88) 75%, #5C4F3D 100%)",
           }}
         />
       </div>
 
       {/* Crew lockup — top-left */}
-      <div className="relative z-10 flex items-center gap-2 px-6 pt-16">
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center -space-x-2"
-        >
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="relative z-10 flex items-center gap-0 px-5 pt-16"
+      >
+        <div className="flex items-center -space-x-2">
           <Image
             src="/harold-mascot.png"
             alt="Harold"
             width={34}
             height={34}
-            className="rounded-full border-2 border-white/40 shadow-md"
+            className="rounded-full border-2 border-white/50 shadow-md"
           />
           <Image
             src="/Andy.png"
             alt="Andy"
             width={30}
             height={30}
-            className="rounded-full border-2 border-white/40 shadow-md object-cover"
+            className="rounded-full border-2 border-white/50 shadow-md object-cover"
           />
           <Image
             src="/Mariana.png"
             alt="Mariana"
             width={30}
             height={30}
-            className="rounded-full border-2 border-white/40 shadow-md object-cover"
+            className="rounded-full border-2 border-white/50 shadow-md object-cover"
           />
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
 
-      {/* Content wrapper */}
-      <div className="relative z-10 flex flex-col min-h-[calc(100vh-80px)] px-6 pt-6 pb-10">
+      {/* Content */}
+      <div className="relative z-10 flex flex-col min-h-[calc(100vh-88px)] px-5 pt-6 pb-8">
         {/* Top headline */}
         <motion.div
-          initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+          initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{
+            duration: 0.8,
+            delay: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
         >
           <h1
-            className="font-serif italic text-white leading-[1.1] drop-shadow-lg"
+            className="text-white leading-[1.1] drop-shadow-lg"
             style={{
               fontFamily: '"DM Serif Display", Georgia, serif',
-              fontSize: "clamp(1.9rem, 7.5vw, 3rem)",
+              fontStyle: "italic",
+              fontSize: "clamp(1.9rem, 7.5vw, 2.9rem)",
             }}
           >
             Hey there,
@@ -91,15 +96,16 @@ export default function Home() {
 
         {/* Bottom headline */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
           className="mb-6"
         >
           <h2
-            className="font-serif italic text-white leading-[1.1] drop-shadow-lg"
+            className="text-white leading-[1.1] drop-shadow-lg"
             style={{
               fontFamily: '"DM Serif Display", Georgia, serif',
+              fontStyle: "italic",
               fontSize: "clamp(1.7rem, 6.5vw, 2.5rem)",
             }}
           >
@@ -111,13 +117,13 @@ export default function Home() {
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
         >
           <Link
             href="/onboarding"
-            className="flex items-center justify-center gap-2 w-full px-8 py-4 rounded-full font-semibold text-base shadow-xl"
+            className="flex items-center justify-center gap-2 w-full px-6 py-4 rounded-full font-semibold text-base"
             style={{
               background: "#3D3529",
               color: "#F5F0E8",
@@ -140,13 +146,9 @@ export default function Home() {
             </svg>
           </Link>
 
-          <div className="flex items-center justify-center gap-4 mt-5 text-xs text-white/80">
+          <div className="flex items-center justify-center gap-4 mt-5 text-xs text-white/85">
             <Link href="/auth" className="hover:text-white transition-colors">
               I already have an account
-            </Link>
-            <span className="opacity-50">·</span>
-            <Link href="/#about" className="hover:text-white transition-colors">
-              Learn more
             </Link>
           </div>
         </motion.div>

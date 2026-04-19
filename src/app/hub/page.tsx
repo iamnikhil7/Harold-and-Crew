@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import PhoneHeader from "@/components/PhoneHeader";
+import PillButton from "@/components/PillButton";
 
 interface Insight {
   headline: string;
@@ -18,7 +20,7 @@ const insights: Insight[] = [
     body: "Your energy is dipping, sleep's been erratic, and the weekend is coming up fast. Subtle, but worth noticing.",
     weekDots: ["yellow", "yellow", "green", "yellow", "red", "yellow", "yellow"],
     haroldNote:
-      "Some light movement might help right now. Even 15 minutes of the rest of your day feels. Don't stress it.",
+      "Some light movement might help right now — even 15 minutes. Don't stress it.",
   },
   {
     headline: "You've been finding rhythm this week",
@@ -61,7 +63,7 @@ const activities: Activity[] = [
       "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&q=80",
   },
   {
-    slug: "morning-walkk",
+    slug: "morning-walk",
     title: "Morning Walk",
     tag: "Gentle · waterfront",
     when: "Wed · 7:15 AM",
@@ -85,13 +87,10 @@ const dotColor: Record<string, string> = {
 };
 
 export default function HubPage() {
-  const [greeting, setGreeting] = useState("Welcome back");
   const [insight, setInsight] = useState<Insight>(insights[0]);
   const [archetype, setArchetype] = useState<string | null>(null);
 
   useEffect(() => {
-    const h = new Date().getHours();
-    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
     setInsight(insights[Math.floor(Math.random() * insights.length)]);
     try {
       const raw = localStorage.getItem("harold_profile");
@@ -104,78 +103,71 @@ export default function HubPage() {
 
   return (
     <div
-      className="min-h-full"
+      className="min-h-full flex flex-col"
       style={{ background: "var(--gradient-page)" }}
     >
-      {/* Header */}
-      <header className="flex items-center justify-between px-5 pt-14 pb-3">
-        <div className="flex flex-col">
-          <span className="text-xs" style={{ color: "var(--muted-soft)" }}>
-            {greeting}
-          </span>
-          {archetype && (
-            <span
-              className="font-serif italic text-sm"
-              style={{
-                fontFamily: '"DM Serif Display", Georgia, serif',
-                fontStyle: "italic",
-                color: "var(--accent)",
-              }}
-            >
-              {archetype}
-            </span>
-          )}
-        </div>
-        <Link
-          href="/settings"
-          className="text-xs"
-          style={{ color: "var(--muted-soft)" }}
-        >
-          Settings
-        </Link>
-      </header>
+      <PhoneHeader
+        right={
+          <Link
+            href="/settings"
+            className="text-xs"
+            style={{ color: "var(--muted-soft)" }}
+          >
+            Settings
+          </Link>
+        }
+      />
 
-      <main className="px-5 pb-24 space-y-6">
-        {/* Insight card */}
+      <main className="px-5 pb-10 space-y-6">
+        {/* Insight intro */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center"
+          className="text-center pt-2"
         >
           <motion.div
             animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
             className="mx-auto mb-3"
           >
             <Image
               src="/harold-mascot.png"
               alt="Harold"
-              width={64}
-              height={64}
+              width={66}
+              height={66}
               className="rounded-[30%] mx-auto"
-              style={{ filter: "drop-shadow(0 10px 24px rgba(100,80,60,0.18))" }}
+              style={{
+                filter: "drop-shadow(0 10px 24px rgba(100,80,60,0.2))",
+              }}
             />
           </motion.div>
 
-          <p className="text-xs mb-1" style={{ color: "var(--muted-soft)" }}>
-            Something feels slightly off today
-          </p>
+          {archetype && (
+            <p className="text-xs mb-1" style={{ color: "var(--muted-soft)" }}>
+              Welcome back, <span style={{ color: "var(--accent)" }}>{archetype}</span>
+            </p>
+          )}
+
           <h1
-            className="font-serif italic mb-3"
+            className="mb-3"
             style={{
               fontFamily: '"DM Serif Display", Georgia, serif',
               fontStyle: "italic",
               color: "#2C2418",
-              fontSize: "clamp(1.4rem, 5.5vw, 1.8rem)",
+              fontSize: "clamp(1.4rem, 5.4vw, 1.75rem)",
               lineHeight: 1.2,
             }}
           >
             {insight.headline}
           </h1>
           <p
-            className="text-sm leading-relaxed mx-auto max-w-sm"
-            style={{ color: "var(--muted)" }}
+            className="text-sm leading-relaxed mx-auto"
+            style={{ color: "var(--muted)", maxWidth: "32ch" }}
           >
             {insight.body}
           </p>
@@ -200,14 +192,14 @@ export default function HubPage() {
           </div>
         </motion.section>
 
-        {/* Harold note speech bubble */}
+        {/* Harold note */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative rounded-2xl p-4 mx-3"
+          className="rounded-2xl p-4"
           style={{
-            background: "rgba(255,255,255,0.9)",
+            background: "rgba(255,255,255,0.92)",
             border: "1px solid rgba(180,165,140,0.25)",
             boxShadow: "0 8px 24px rgba(61,53,41,0.06)",
           }}
@@ -223,13 +215,13 @@ export default function HubPage() {
           </p>
         </motion.div>
 
-        {/* Feature activity */}
+        {/* Anchor activity */}
         <AnchorCard />
 
         {/* Activity grid */}
         <section>
           <h2
-            className="font-serif italic mb-3"
+            className="mb-3"
             style={{
               fontFamily: '"DM Serif Display", Georgia, serif',
               fontStyle: "italic",
@@ -269,39 +261,7 @@ export default function HubPage() {
           </div>
         </section>
 
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="pt-2"
-          >
-            <Link
-              href="/check-in"
-              className="flex items-center justify-center gap-2 w-full py-4 rounded-full font-semibold text-sm"
-              style={{
-                background: "#3D3529",
-                color: "#F5F0E8",
-                boxShadow: "0 14px 40px rgba(61,53,41,0.3)",
-              }}
-            >
-              Suggest workouts for today
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+        <PillButton href="/check-in">Suggest workouts for today</PillButton>
       </main>
     </div>
   );
@@ -310,16 +270,16 @@ export default function HubPage() {
 function AnchorCard() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-      className="overflow-hidden rounded-3xl relative"
+      transition={{ duration: 0.5, delay: 0.3 }}
+      className="overflow-hidden rounded-3xl"
       style={{ boxShadow: "0 14px 34px rgba(61,53,41,0.15)" }}
     >
       <div className="relative w-full aspect-[5/3]">
         <Image
           src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80"
-          alt="Sunday morning run club"
+          alt="Saturday morning run club"
           fill
           sizes="(max-width: 480px) 100vw, 430px"
           className="object-cover"
@@ -336,7 +296,7 @@ function AnchorCard() {
             Run Club
           </span>
           <h3
-            className="font-serif italic text-xl leading-tight"
+            className="text-xl leading-tight"
             style={{
               fontFamily: '"DM Serif Display", Georgia, serif',
               fontStyle: "italic",
@@ -349,13 +309,10 @@ function AnchorCard() {
           </p>
         </div>
       </div>
-      <div
-        className="p-4"
-        style={{ background: "rgba(255,252,246,0.95)" }}
-      >
+      <div className="p-4" style={{ background: "rgba(255,252,246,0.95)" }}>
         <p className="text-sm" style={{ color: "var(--muted)" }}>
-          Light. Social routes like these tend to help right now. Don&rsquo;t
-          stress if you&rsquo;re rusty — nobody else isn&rsquo;t either.
+          Social routes like these tend to help right now. Don&rsquo;t stress if
+          you&rsquo;re rusty — nobody else isn&rsquo;t either.
         </p>
         <Link
           href="/hub/activity/sunday-run"
